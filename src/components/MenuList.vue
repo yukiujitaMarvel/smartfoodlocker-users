@@ -177,12 +177,12 @@
 
 <script>
 import { API, graphqlOperation} from 'aws-amplify'
-import { listItemLists } from '../graphql/queries'
+import { listItems } from '../graphql/queries'
 
 export default {
   data() {
     return {
-      itemLists: [],
+      items: [],
       bentos: [],
       sandwichs: [],
       salads: [],
@@ -191,53 +191,53 @@ export default {
     }
   },
   async created() {
-    await this.getItemLists1()
-    await this.getItemLists2()
-    await this.getItemLists3()
-    await this.getItemLists4()
+    await this.getItems1()
+    await this.getItems2()
+    await this.getItems3()
+    await this.getItems4()
   },
   methods: {
-    async getItemLists1() {
-      const itemLists = await API.graphql(graphqlOperation(listItemLists));
-      this.itemLists = itemLists.data.listItemLists.items;
+    async getItems1() {
+      const items = await API.graphql(graphqlOperation(listItems));
+      this.items = items.data.listItems.items;
       
-      this.itemLists.forEach((value) => {
+      this.items.forEach((value) => {
         if(value.category_id == '01') {
           this.bentos.push(value)
-          // console.log(this.bentos)
+          console.log(this.bentos)
         }
       })
     },
-    async getItemLists2() {
-      const itemLists = await API.graphql(graphqlOperation(listItemLists));
-      this.itemLists = itemLists.data.listItemLists.items;
+    async getItems2() {
+      const items = await API.graphql(graphqlOperation(listItems));
+      this.items = items.data.listItems.items;
       
-      this.itemLists.forEach((value) => {
+      this.items.forEach((value) => {
         if(value.category_id == '02') {
           this.sandwichs.push(value)
-          // console.log(this.sandwichs)
+          console.log(this.sandwichs)
         }
       })
     },
-    async getItemLists3() {
-      const itemLists = await API.graphql(graphqlOperation(listItemLists));
-      this.itemLists = itemLists.data.listItemLists.items;
+    async getItems3() {
+      const items = await API.graphql(graphqlOperation(listItems));
+      this.items = items.data.listItems.items;
       
-      this.itemLists.forEach((value) => {
+      this.items.forEach((value) => {
         if(value.category_id == '03') {
           this.salads.push(value)
-          // console.log(this.salads)
+          console.log(this.salads)
         }
       })
     },
-    async getItemLists4() {
-      const itemLists = await API.graphql(graphqlOperation(listItemLists));
-      this.itemLists = itemLists.data.listItemLists.items;
+    async getItems4() {
+      const items = await API.graphql(graphqlOperation(listItems));
+      this.items = items.data.listItems.items;
       
-      this.itemLists.forEach((value) => {
+      this.items.forEach((value) => {
         if(value.category_id == '04') {
           this.soups.push(value)
-          // console.log(this.soups)
+          console.log(this.soups)
         }
       })
     },

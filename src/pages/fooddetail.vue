@@ -61,7 +61,8 @@ import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation} from 'aws-amplify'
-import { listItemLists } from '../graphql/queries'
+import { getItems, /*listItemLists*/ } from '../graphql/queries'
+import { tsImportEqualsDeclaration } from '@babel/types'
 
 export default {
   head() {
@@ -72,7 +73,7 @@ export default {
   data () {
   return {
      myTitle: '' /*['items.item_name']*/,
-     items: ''
+     items: {}
     }
   },
   components: {
@@ -86,7 +87,13 @@ export default {
   methods: {
     async getItemLists() {
       const query = this.$route.query.id;
-      const itemLists = await API.graphql(graphqlOperation(listItemLists));
+      const items = await API.graphql(graphqlOperation(getItems,{item_id: query}));
+      console.log(items);
+      this.items = items.data.getItems;
+      console.log(this.items);
+      this.myTitle = items.data.getItems.item_name;
+
+      /*const itemLists = await API.graphql(graphqlOperation(listItemLists));
       this.itemLists = itemLists.data.listItemLists.items;
 
       this.itemLists.forEach((value) => {
@@ -94,7 +101,7 @@ export default {
           this.items = value;
           this.myTitle = value.item_name;
         }
-      })
+      })*/
     },
   },
 }

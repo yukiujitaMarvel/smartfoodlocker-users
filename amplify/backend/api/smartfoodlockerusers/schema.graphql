@@ -2,6 +2,22 @@
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
 input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
+type Items @model{
+    item_id: ID! @primaryKey
+    item_img: String
+    category_id: ID!
+    item_name: String
+    item_price: String
+    race_option: Int
+    soup_option: Int
+    release: Boolean
+    deleteAt: AWSDateTime
+    create_user: ID
+    update_user: ID
+    delete_user: ID
+    logical_deletion_flg: Boolean
+}
+
 type ItemList {
     item_id: String
     item_img: String
@@ -24,23 +40,25 @@ type ItemListConnection {
     nextToken: String
 }
 
-type User {
-    user_id: String
+type Users @model {
+    user_id: ID! @primaryKey
     user_name: String
     user_email: String
     user_number: String
-    create_at: String
-    update_at: String
 }
 
-type UserConnection {
-    items: [User]
-    nextToken: String
+type Carts @model {
+    item_id: ID! @primaryKey(sortKeyFields: ["user_id"])
+    user_id: ID!
+}
+
+type PayInfo @ model {
+    user_id: ID! @primaryKey
+    card_number: Int
+    expiry: Int
 }
 
 type Query {
     getItemList(item_id: String!): ItemList
     listItemLists(limit: Int, nextToken: String): ItemListConnection
-    getUser(user_id: String!): User
-    listUsers(limit: Int, nextToken: String): UserConnection
 }

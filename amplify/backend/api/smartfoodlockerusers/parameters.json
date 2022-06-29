@@ -2,6 +2,5 @@
   "AppSyncApiName": "smartfoodlockerusers",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "ItemListDynamoDBServiceRoleArn": "arn:aws:iam::701165139405:role/service-role/appsync-ds-ddb-a2x4p4-itemList",
-  "UserDynamoDBServiceRoleArn": "arn:aws:iam::701165139405:role/service-role/appsync-ds-ddb-au2cpd-user",
   "DynamoDBEnableServerSideEncryption": false
 }
