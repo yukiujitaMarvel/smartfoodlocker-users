@@ -48,8 +48,12 @@ type Users @model {
 }
 
 type Carts @model {
-    item_id: ID! @primaryKey(sortKeyFields: ["user_id"])
+    id: ID! @primaryKey
+    item_id: ID!
+    items: Items @hasOne(fields: ["item_id"])
     user_id: ID!
+    race_option: String
+    soup_option: String
 }
 
 type PayInfo @ model {

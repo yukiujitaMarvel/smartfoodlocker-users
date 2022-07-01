@@ -141,10 +141,30 @@ export const listUsers = /* GraphQL */ `
   }
 `;
 export const getCarts = /* GraphQL */ `
-  query GetCarts($item_id: ID!, $user_id: ID!) {
-    getCarts(item_id: $item_id, user_id: $user_id) {
+  query GetCarts($id: ID!) {
+    getCarts(id: $id) {
+      id
       item_id
+      items {
+        item_id
+        item_img
+        category_id
+        item_name
+        item_price
+        race_option
+        soup_option
+        release
+        deleteAt
+        create_user
+        update_user
+        delete_user
+        logical_deletion_flg
+        createdAt
+        updatedAt
+      }
       user_id
+      race_option
+      soup_option
       createdAt
       updatedAt
     }
@@ -152,24 +172,42 @@ export const getCarts = /* GraphQL */ `
 `;
 export const listCarts = /* GraphQL */ `
   query ListCarts(
-    $item_id: ID
-    $user_id: ModelIDKeyConditionInput
+    $id: ID
     $filter: ModelCartsFilterInput
     $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
     listCarts(
-      item_id: $item_id
-      user_id: $user_id
+      id: $id
       filter: $filter
       limit: $limit
       nextToken: $nextToken
       sortDirection: $sortDirection
     ) {
       items {
+        id
         item_id
+        items {
+          item_id
+          item_img
+          category_id
+          item_name
+          item_price
+          race_option
+          soup_option
+          release
+          deleteAt
+          create_user
+          update_user
+          delete_user
+          logical_deletion_flg
+          createdAt
+          updatedAt
+        }
         user_id
+        race_option
+        soup_option
         createdAt
         updatedAt
       }

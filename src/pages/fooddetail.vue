@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header />
+    <Header ref="userData" />
     <HeaderDetail :title="myTitle" />
     <div class="food-detail-wrap">
       <div class="food-detail-inner-wrap">
@@ -16,15 +16,15 @@
               <h3>ご飯</h3>
             </div>
             <fieldset>
-              <input id="item-1" class="radio-inline__input" type="radio" name="race_option" value="01" checked="checked"/>
+              <input id="item-1" class="radio-inline__input" type="radio" name="race_option" v-model="raceOption" value="01"/>
               <label class="radio-inline__label" for="item-1">
                   少なめ
               </label>
-              <input id="item-2" class="radio-inline__input" type="radio" name="race_option" value="02"/>
+              <input id="item-2" class="radio-inline__input" type="radio" name="race_option" v-model="raceOption" value="02"/>
               <label class="radio-inline__label" for="item-2">
                   普通
               </label>
-              <input id="item-3" class="radio-inline__input" type="radio" name="race_option" value="03"/>
+              <input id="item-3" class="radio-inline__input" type="radio" name="race_option" v-model="raceOption" value="03"/>
               <label class="radio-inline__label" for="item-3">
                   多め +¥30
               </label>
@@ -35,11 +35,11 @@
               <h3>味噌汁</h3>
             </div>
             <fieldset>
-              <input id="item-4" class="radio-inline__input" type="radio" name="soup-option" value="01" checked="checked"/>
+              <input id="item-4" class="radio-inline__input" type="radio" name="soup-option" v-model="soupOption" value="01"/>
               <label class="radio-inline__label" for="item-4">
                   少なめ
               </label>
-              <input id="item-5" class="radio-inline__input" type="radio" name="soup-option" value="02"/>
+              <input id="item-5" class="radio-inline__input" type="radio" name="soup-option" v-model="soupOption" value="02"/>
               <label class="radio-inline__label" for="item-5">
                   普通
               </label>
@@ -47,7 +47,7 @@
           </div>
         </div>
         <div class="button-wrap">
-          <a href="#" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />カートへ追加する</a>
+          <a href="cart" v-on:click="addCarts" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />カートへ追加する</a>
         </div>
       </div>
     </div>
@@ -62,6 +62,7 @@ import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation} from 'aws-amplify'
 import { getItems, /*listItemLists*/ } from '../graphql/queries'
+import { createCarts } from '../graphql/mutations'
 import { tsImportEqualsDeclaration } from '@babel/types'
 
 export default {
@@ -72,8 +73,10 @@ export default {
   },
   data () {
   return {
-     myTitle: '' /*['items.item_name']*/,
-     items: {}
+      myTitle: '' /*['items.item_name']*/,
+      items: {},
+      raceOption: null,
+      soupOption: null,
     }
   },
   components: {
@@ -82,16 +85,21 @@ export default {
     Footer,
   },
   async created() {
-    await this.getItemLists()
+    await this.getItems()
   },
   methods: {
-    async getItemLists() {
+    async getItems() {
       const query = this.$route.query.id;
       const items = await API.graphql(graphqlOperation(getItems,{item_id: query}));
       console.log(items);
       this.items = items.data.getItems;
       console.log(this.items);
       this.myTitle = items.data.getItems.item_name;
+      
+      if(items.data.getItems.category_id === '01'){
+        this.raceOption = '01';
+        this.soupOption = '01';
+      }
 
       /*const itemLists = await API.graphql(graphqlOperation(listItemLists));
       this.itemLists = itemLists.data.listItemLists.items;
@@ -103,6 +111,18 @@ export default {
         }
       })*/
     },
+
+    async addCarts() {
+      const createCartsInput = {
+        item_id: this.items.item_id,
+        user_id: this.$refs.userData.users.attributes.sub,
+        race_option: this.raceOption,
+        soup_option: this.soupOption,
+      };
+
+      await API.graphql(graphqlOperation(createCarts,{input: createCartsInput}));
+
+    }
   },
 }
 </script>

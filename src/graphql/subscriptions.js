@@ -103,8 +103,28 @@ export const onDeleteUsers = /* GraphQL */ `
 export const onCreateCarts = /* GraphQL */ `
   subscription OnCreateCarts {
     onCreateCarts {
+      id
       item_id
+      items {
+        item_id
+        item_img
+        category_id
+        item_name
+        item_price
+        race_option
+        soup_option
+        release
+        deleteAt
+        create_user
+        update_user
+        delete_user
+        logical_deletion_flg
+        createdAt
+        updatedAt
+      }
       user_id
+      race_option
+      soup_option
       createdAt
       updatedAt
     }
@@ -113,8 +133,28 @@ export const onCreateCarts = /* GraphQL */ `
 export const onUpdateCarts = /* GraphQL */ `
   subscription OnUpdateCarts {
     onUpdateCarts {
+      id
       item_id
+      items {
+        item_id
+        item_img
+        category_id
+        item_name
+        item_price
+        race_option
+        soup_option
+        release
+        deleteAt
+        create_user
+        update_user
+        delete_user
+        logical_deletion_flg
+        createdAt
+        updatedAt
+      }
       user_id
+      race_option
+      soup_option
       createdAt
       updatedAt
     }
@@ -123,8 +163,28 @@ export const onUpdateCarts = /* GraphQL */ `
 export const onDeleteCarts = /* GraphQL */ `
   subscription OnDeleteCarts {
     onDeleteCarts {
+      id
       item_id
+      items {
+        item_id
+        item_img
+        category_id
+        item_name
+        item_price
+        race_option
+        soup_option
+        release
+        deleteAt
+        create_user
+        update_user
+        delete_user
+        logical_deletion_flg
+        createdAt
+        updatedAt
+      }
       user_id
+      race_option
+      soup_option
       createdAt
       updatedAt
     }
