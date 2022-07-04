@@ -7,12 +7,19 @@
           <div class="order-info">
             <h1>注文情報</h1>
             <ol class="order-list">
-              <li>焼き魚弁当</li>
-              <span class="amount">大盛り</span><span>味噌汁</span>
-              <li>デリサラダ</li>
+              <li v-for="cart in carts" v-bind:key="cart.id">
+                {{cart.items.item_name}}
+                <div v-if="cart.items.category_id === '01'">
+                  <span v-if="cart.rice_option === '01'" class="amount">少な目</span>
+                  <span v-else-if="cart.rice_option === '02'" class="amount">普通</span>
+                  <span v-else class="amount">多め</span>
+                  <span v-if="cart.soup_option === '02'">味噌汁</span>
+                </div>
+              </li>             
+              <!--<li>デリサラダ</li>-->
             </ol>
             <div class="total-price">
-              <p>¥860</p>
+              <p>¥{{totalPrice.toLocaleString()}}</p>
             </div>
           </div>
           <div class="pay-info">
@@ -33,6 +40,9 @@
 import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
+import { API, graphqlOperation } from 'aws-amplify'
+import { listCarts } from '../graphql/queries'
+import Auth from "@aws-amplify/auth";
 
 export default {
   head() {
@@ -42,7 +52,10 @@ export default {
   },
   data () {
   return {
-     myTitle: '支払い情報'
+     myTitle: '支払い情報',
+     carts: [],
+     user_id: '',
+     totalPrice: 0,
     }
   },
   components: {
@@ -50,6 +63,43 @@ export default {
     HeaderDetail,
     Footer,
   },
+  async created() {
+    await this.listCarts();
+    this.totalPrice = this.getTotalPrice(this.carts);
+  },
+  methods: {
+    async listCarts() {
+      const userData = await Auth.currentAuthenticatedUser();
+      this.user_id = userData.attributes.sub;
+      const carts = await API.graphql(
+        graphqlOperation(
+          listCarts, {
+            filter: {
+              user_id: {
+                eq: this.user_id
+              }
+            }
+          }
+        )
+      );
+      this.carts = carts.data.listCarts.items;
+      console.log(this.carts[0]?.item_id);
+    },
+    getTotalPrice(carts) {
+      let totalPrice = 0;
+      carts.forEach((cart) => {
+        let price = Number(cart.items.item_price);
+        if(cart.rice_option === '03') {
+          price = price + 30;
+        }
+        if(cart.soup_option === '02') {
+          price = price + 50;
+        }
+        totalPrice = totalPrice + price;
+      });
+      return totalPrice;
+    }
+  }  
 }
 </script>
 

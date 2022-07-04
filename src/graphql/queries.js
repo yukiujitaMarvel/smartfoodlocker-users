@@ -163,7 +163,7 @@ export const getCarts = /* GraphQL */ `
         updatedAt
       }
       user_id
-      race_option
+      rice_option
       soup_option
       createdAt
       updatedAt
@@ -206,7 +206,7 @@ export const listCarts = /* GraphQL */ `
           updatedAt
         }
         user_id
-        race_option
+        rice_option
         soup_option
         createdAt
         updatedAt

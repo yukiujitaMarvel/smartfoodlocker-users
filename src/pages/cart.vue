@@ -10,12 +10,12 @@
           <div class="product-info">
             <div class="product-text">
               <h1>{{cart.items.item_name}}<span>¥{{cart.items.item_price}}</span></h1>
-              <h2 v-if="cart.race_option">
+              <h2 v-if="cart.rice_option">
                 ご飯
-                <span v-if="cart.race_option === '01'">少なめ</span>
-                <span v-else-if="cart.race_option === '02'">普通</span>
+                <span v-if="cart.rice_option === '01'">少なめ</span>
+                <span v-else-if="cart.rice_option === '02'">普通</span>
                 <span v-else>多め</span>
-                <span v-if="cart.race_option === '03'">¥30</span>
+                <span v-if="cart.rice_option === '03'">¥30</span>
               </h2>
               <h2 v-if="cart.soup_option">
                 味噌汁
@@ -154,7 +154,7 @@ export default {
     HeaderDetail,
     Footer,
   },
-  async mounted() {
+  async created() {
     await this.listCarts();
   },
   methods: {
@@ -173,7 +173,7 @@ export default {
         )
       );
       this.carts = carts.data.listCarts.items;
-      console.log(this.carts[0].item_id);
+      console.log(this.carts[0]?.item_id);
     },
     async deleteCarts(cart) {
       const deleteCartsInput = {
@@ -197,7 +197,7 @@ export default {
       let price = Number(cart.items.item_price);
       console.log(price);
 
-      if(cart.race_option === '03') {
+      if(cart.rice_option === '03') {
         price = price + 30;
         console.log(price);
       }

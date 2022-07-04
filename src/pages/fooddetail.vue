@@ -16,15 +16,15 @@
               <h3>ご飯</h3>
             </div>
             <fieldset>
-              <input id="item-1" class="radio-inline__input" type="radio" name="race_option" v-model="raceOption" value="01"/>
+              <input id="item-1" class="radio-inline__input" type="radio" name="rice_option" v-model="riceOption" value="01"/>
               <label class="radio-inline__label" for="item-1">
                   少なめ
               </label>
-              <input id="item-2" class="radio-inline__input" type="radio" name="race_option" v-model="raceOption" value="02"/>
+              <input id="item-2" class="radio-inline__input" type="radio" name="rice_option" v-model="riceOption" value="02"/>
               <label class="radio-inline__label" for="item-2">
                   普通
               </label>
-              <input id="item-3" class="radio-inline__input" type="radio" name="race_option" v-model="raceOption" value="03"/>
+              <input id="item-3" class="radio-inline__input" type="radio" name="rice_option" v-model="riceOption" value="03"/>
               <label class="radio-inline__label" for="item-3">
                   多め +¥30
               </label>
@@ -75,7 +75,7 @@ export default {
   return {
       myTitle: '' /*['items.item_name']*/,
       items: {},
-      raceOption: null,
+      riceOption: null,
       soupOption: null,
     }
   },
@@ -97,7 +97,7 @@ export default {
       this.myTitle = items.data.getItems.item_name;
       
       if(items.data.getItems.category_id === '01'){
-        this.raceOption = '01';
+        this.riceOption = '01';
         this.soupOption = '01';
       }
 
@@ -116,7 +116,7 @@ export default {
       const createCartsInput = {
         item_id: this.items.item_id,
         user_id: this.$refs.userData.users.attributes.sub,
-        race_option: this.raceOption,
+        rice_option: this.riceOption,
         soup_option: this.soupOption,
       };
 

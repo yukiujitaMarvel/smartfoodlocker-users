@@ -123,7 +123,7 @@ export const onCreateCarts = /* GraphQL */ `
         updatedAt
       }
       user_id
-      race_option
+      rice_option
       soup_option
       createdAt
       updatedAt
@@ -153,7 +153,7 @@ export const onUpdateCarts = /* GraphQL */ `
         updatedAt
       }
       user_id
-      race_option
+      rice_option
       soup_option
       createdAt
       updatedAt
@@ -183,7 +183,7 @@ export const onDeleteCarts = /* GraphQL */ `
         updatedAt
       }
       user_id
-      race_option
+      rice_option
       soup_option
       createdAt
       updatedAt

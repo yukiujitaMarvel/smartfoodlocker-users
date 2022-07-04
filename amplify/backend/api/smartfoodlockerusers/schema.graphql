@@ -52,7 +52,7 @@ type Carts @model {
     item_id: ID!
     items: Items @hasOne(fields: ["item_id"])
     user_id: ID!
-    race_option: String
+    rice_option: String
     soup_option: String
 }
 
