@@ -8,10 +8,9 @@ type Items @model{
     category_id: ID!
     item_name: String
     item_price: String
-    race_option: Int
-    soup_option: Int
     release: Boolean
     deleteAt: AWSDateTime
+    item_stock: Int
     create_user: ID
     update_user: ID
     delete_user: ID
@@ -48,8 +47,12 @@ type Users @model {
 }
 
 type Carts @model {
-    item_id: ID! @primaryKey(sortKeyFields: ["user_id"])
+    id: ID! @primaryKey
+    item_id: ID!
+    items: Items @hasOne(fields: ["item_id"])
     user_id: ID!
+    rice_option: String
+    soup_option: String
 }
 
 type PayInfo @ model {

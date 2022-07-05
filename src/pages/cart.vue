@@ -1,9 +1,47 @@
 <template>
   <div>
-    <Header />
+    <Header ref="userData" />
     <HeaderDetail :title="myTitle" />
       <div class="cart-wrap">
-        <div class="wrapper">
+        <div v-for="cart in carts" v-bind:key="cart.id" class="wrapper">
+          <div class="product-img">
+            <img v-bind:src="cart.items.item_img">
+          </div>
+          <div class="product-info">
+            <div class="product-text">
+              <h1>{{cart.items.item_name}}<span>¥{{cart.items.item_price}}</span></h1>
+              <h2 v-if="cart.rice_option">
+                ご飯
+                <span v-if="cart.rice_option === '01'">少なめ</span>
+                <span v-else-if="cart.rice_option === '02'">普通</span>
+                <span v-else>多め</span>
+                <span v-if="cart.rice_option === '03'">¥30</span>
+              </h2>
+              <h2 v-if="cart.soup_option">
+                味噌汁
+                <span v-if="cart.soup_option === '01'">なし</span>
+                <span v-else>要</span>
+                <span v-if="cart.soup_option === '02'">¥50</span>
+              </h2>
+              <div class="product-price-btn">
+                <p>¥{{getPrice(cart)}}円</p>
+                <v-btn
+                  @click="deleteCarts(cart)"
+                  absolute
+                  color="red"
+                  class="white--text"
+                  fab
+                  large
+                  right
+                  top
+                >
+                  <font-awesome-icon icon="fa-solid fa-trash-can" />
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--<div class="wrapper">
           <div class="product-img">
             <img src="https://cdn.vuetifyjs.com/images/cards/cooking.png">
           </div>
@@ -80,33 +118,7 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="wrapper">
-          <div class="product-img">
-            <img src="https://cdn.vuetifyjs.com/images/cards/cooking.png">
-          </div>
-          <div class="product-info">
-            <div class="product-text">
-              <h1>焼き魚弁当<span>¥500</span></h1>
-              <h2>ご飯<span>大盛り</span><span>¥30</span></h2>
-              <h2>味噌汁<span>要</span><span>¥50</span></h2>
-              <div class="product-price-btn">
-                <p>¥580円</p>
-                <v-btn
-                  absolute
-                  color="red"
-                  class="white--text"
-                  fab
-                  large
-                  right
-                  top
-                >
-                  <font-awesome-icon icon="fa-solid fa-trash-can" />
-                </v-btn>
-              </div>
-            </div>
-          </div>
-        </div>
+        </div>-->
         <div class="button-wrap">
           <a href="order" class="btn btn--orange btn-c">お支払い<font-awesome-icon icon="fa-solid fa-angle-right" style="margin-left:20px;" /></a>
         </div>
@@ -119,6 +131,10 @@
 import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
+import { API, graphqlOperation } from 'aws-amplify'
+import { listCarts } from '../graphql/queries'
+import { deleteCarts } from '../graphql/mutations'
+import Auth from "@aws-amplify/auth";
 
 export default {
   head() {
@@ -127,8 +143,10 @@ export default {
     }
   },
   data () {
-  return {
-     myTitle: '注文内容'
+    return {
+      myTitle: '注文内容',
+      carts: [],
+      user_id: '',
     }
   },
   components: {
@@ -136,6 +154,62 @@ export default {
     HeaderDetail,
     Footer,
   },
+  async created() {
+    await this.listCarts();
+  },
+  methods: {
+    async listCarts() {
+      const userData = await Auth.currentAuthenticatedUser();
+      this.user_id = userData.attributes.sub;
+      const carts = await API.graphql(
+        graphqlOperation(
+          listCarts, {
+            filter: {
+              user_id: {
+                eq: this.user_id
+              }
+            }
+          }
+        )
+      );
+      this.carts = carts.data.listCarts.items;
+      console.log(this.carts[0]?.item_id);
+    },
+    async deleteCarts(cart) {
+      const deleteCartsInput = {
+        id: cart.id
+      };
+      await API.graphql(graphqlOperation(deleteCarts,{input: deleteCartsInput}));
+      const carts = await API.graphql(
+        graphqlOperation(
+          listCarts, {
+            filter: {
+              user_id: {
+                eq: this.user_id
+              }
+            }
+          }
+        )
+      );
+      this.carts = carts.data.listCarts.items;
+    },
+    getPrice(cart) {
+      let price = Number(cart.items.item_price);
+      console.log(price);
+
+      if(cart.rice_option === '03') {
+        price = price + 30;
+        console.log(price);
+      }
+      if(cart.soup_option === '02') {
+        price = price + 50;
+        console.log(price);
+      }
+      console.log(price);
+
+      return price;
+    }
+  }
 }
 </script>
 
