@@ -52,10 +52,9 @@ export const getItems = /* GraphQL */ `
       category_id
       item_name
       item_price
-      race_option
-      soup_option
       release
       deleteAt
+      item_stock
       create_user
       update_user
       delete_user
@@ -86,10 +85,9 @@ export const listItems = /* GraphQL */ `
         category_id
         item_name
         item_price
-        race_option
-        soup_option
         release
         deleteAt
+        item_stock
         create_user
         update_user
         delete_user
@@ -151,10 +149,9 @@ export const getCarts = /* GraphQL */ `
         category_id
         item_name
         item_price
-        race_option
-        soup_option
         release
         deleteAt
+        item_stock
         create_user
         update_user
         delete_user
@@ -194,10 +191,9 @@ export const listCarts = /* GraphQL */ `
           category_id
           item_name
           item_price
-          race_option
-          soup_option
           release
           deleteAt
+          item_stock
           create_user
           update_user
           delete_user
