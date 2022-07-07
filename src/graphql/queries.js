@@ -160,6 +160,14 @@ export const getCarts = /* GraphQL */ `
         updatedAt
       }
       user_id
+      users {
+        user_id
+        user_name
+        user_email
+        user_number
+        createdAt
+        updatedAt
+      }
       rice_option
       soup_option
       createdAt
@@ -202,8 +210,111 @@ export const listCarts = /* GraphQL */ `
           updatedAt
         }
         user_id
+        users {
+          user_id
+          user_name
+          user_email
+          user_number
+          createdAt
+          updatedAt
+        }
         rice_option
         soup_option
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getOrders = /* GraphQL */ `
+  query GetOrders($id: ID!) {
+    getOrders(id: $id) {
+      id
+      item_id
+      items {
+        id
+        item_img
+        category_id
+        item_name
+        item_price
+        release
+        deleteAt
+        item_stock
+        create_user
+        update_user
+        delete_user
+        logical_deletion_flg
+        createdAt
+        updatedAt
+      }
+      user_id
+      users {
+        user_id
+        user_name
+        user_email
+        user_number
+        createdAt
+        updatedAt
+      }
+      statas
+      lock_flg
+      item_num
+      create_user
+      update_user
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listOrders = /* GraphQL */ `
+  query ListOrders(
+    $id: ID
+    $filter: ModelOrdersFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listOrders(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        item_id
+        items {
+          id
+          item_img
+          category_id
+          item_name
+          item_price
+          release
+          deleteAt
+          item_stock
+          create_user
+          update_user
+          delete_user
+          logical_deletion_flg
+          createdAt
+          updatedAt
+        }
+        user_id
+        users {
+          user_id
+          user_name
+          user_email
+          user_number
+          createdAt
+          updatedAt
+        }
+        statas
+        lock_flg
+        item_num
+        create_user
+        update_user
         createdAt
         updatedAt
       }

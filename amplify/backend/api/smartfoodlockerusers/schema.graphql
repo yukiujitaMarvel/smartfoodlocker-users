@@ -51,8 +51,22 @@ type Carts @model {
     item_id: ID!
     items: Items @hasOne(fields: ["item_id"])
     user_id: ID!
+    users: Users @hasOne(fields: ["user_id"])
     rice_option: String
     soup_option: String
+}
+
+type Orders @model {
+    id: ID! @primaryKey
+    item_id: ID!
+    items: Items @hasOne(fields: ["item_id"])
+    user_id: ID!
+    users: Users @hasOne(fields: ["user_id"])
+    statas: String
+    lock_flg: Boolean
+    item_num: Int
+    create_user: ID
+    update_user: ID
 }
 
 type PayInfo @ model {
