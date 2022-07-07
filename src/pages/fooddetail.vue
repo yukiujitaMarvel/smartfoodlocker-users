@@ -90,7 +90,7 @@ export default {
   methods: {
     async getItems() {
       const query = this.$route.query.id;
-      const items = await API.graphql(graphqlOperation(getItems,{item_id: query}));
+      const items = await API.graphql(graphqlOperation(getItems,{id: query}));
       console.log(items);
       this.items = items.data.getItems;
       console.log(this.items);
@@ -105,7 +105,7 @@ export default {
       this.itemLists = itemLists.data.listItemLists.items;
 
       this.itemLists.forEach((value) => {
-        if(value.item_id == query) {
+        if(value.id == query) {
           this.items = value;
           this.myTitle = value.item_name;
         }
@@ -114,7 +114,7 @@ export default {
 
     async addCarts() {
       const createCartsInput = {
-        item_id: this.items.item_id,
+        item_id: this.items.id,
         user_id: this.$refs.userData.users.attributes.sub,
         rice_option: this.riceOption,
         soup_option: this.soupOption,
