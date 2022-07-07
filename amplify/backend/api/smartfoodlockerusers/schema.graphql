@@ -17,28 +17,6 @@ type Items @model{
     logical_deletion_flg: Boolean
 }
 
-type ItemList {
-    item_id: String
-    item_img: String
-    category_id: String
-    item_name: String
-    item_price: Int
-    remaiks: String
-    release: Int
-    create_at: Int
-    update_at: Int
-    delete_at: Int
-    create_user: Int
-    update_user: Int
-    delete_user: Int
-    logical_deletion_flg: Int
-}
-
-type ItemListConnection {
-    items: [ItemList]
-    nextToken: String
-}
-
 type Users @model {
     user_id: ID! @primaryKey
     user_name: String
@@ -73,9 +51,4 @@ type PayInfo @ model {
     user_id: ID! @primaryKey
     card_number: Int
     expiry: Int
-}
-
-type Query {
-    getItemList(item_id: String!): ItemList
-    listItemLists(limit: Int, nextToken: String): ItemListConnection
 }

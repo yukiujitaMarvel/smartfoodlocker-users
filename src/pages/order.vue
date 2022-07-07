@@ -29,7 +29,7 @@
           </div>     
         </div>
         <div class="button-wrap">
-          <a href="passcode" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-check" style="margin-right:20px;" />確定する</a>
+          <a href="#" v-on:click="addOrders" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-check" style="margin-right:20px;" />確定する</a>
         </div>
       </div>
     <Footer />
@@ -42,6 +42,7 @@ import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation } from 'aws-amplify'
 import { listCarts } from '../graphql/queries'
+import { createOrders, deleteCarts } from '../graphql/mutations'
 import Auth from "@aws-amplify/auth";
 
 export default {
@@ -64,13 +65,13 @@ export default {
     Footer,
   },
   async created() {
+    const userData = await Auth.currentAuthenticatedUser();
+    this.user_id = userData.attributes.sub;
     await this.listCarts();
     this.totalPrice = this.getTotalPrice(this.carts);
   },
   methods: {
     async listCarts() {
-      const userData = await Auth.currentAuthenticatedUser();
-      this.user_id = userData.attributes.sub;
       const carts = await API.graphql(
         graphqlOperation(
           listCarts, {
@@ -84,6 +85,27 @@ export default {
       );
       this.carts = carts.data.listCarts.items;
       console.log(this.carts[0]?.item_id);
+    },
+    async addOrders() {
+      const promises = this.carts.map(async (cart) => {
+        const createOrdersInput = {
+          item_id: cart.item_id,
+          user_id: this.user_id,
+          statas: "01",
+          lock_flg: false,
+          item_num: 1,
+          create_user: this.user_id,
+          update_user: this.user_id,
+        };
+        const deleteCartsInput = {
+          id: cart.id
+        };
+        await API.graphql(graphqlOperation(createOrders,{input: createOrdersInput}))
+        await API.graphql(graphqlOperation(deleteCarts,{input: deleteCartsInput}))
+      });
+      await Promise.all(promises);
+
+      window.location.href = "passcode";
     },
     getTotalPrice(carts) {
       let totalPrice = 0;
