@@ -23,7 +23,7 @@
                   color="grey lighten-4"
                   max-width="600"
                 >
-                  <a :href="'fooddetail?id=' + bento.item_id">
+                  <a :href="'fooddetail?id=' + bento.id">
                     <v-img
                       :aspect-ratio="16/12"
                       :src="bento.item_img"
@@ -62,7 +62,7 @@
                   color="grey lighten-4"
                   max-width="600"
                 >
-                  <a :href="'fooddetail?id=' + sandwich.item_id">
+                  <a :href="'fooddetail?id=' + sandwich.id">
                     <v-img
                       :aspect-ratio="16/12"
                       :src="sandwich.item_img"
@@ -101,7 +101,7 @@
                   color="grey lighten-4"
                   max-width="600"
                 >
-                  <a :href="'fooddetail?id=' + salad.item_id">
+                  <a :href="'fooddetail?id=' + salad.id">
                     <v-img
                       :aspect-ratio="16/12"
                       :src="salad.item_img"
@@ -140,7 +140,7 @@
                   color="grey lighten-4"
                   max-width="600"
                 >
-                  <a :href="'fooddetail?id=' + soup.item_id">
+                  <a :href="'fooddetail?id=' + soup.id">
                     <v-img
                       :aspect-ratio="16/12"
                       :src="soup.item_img"

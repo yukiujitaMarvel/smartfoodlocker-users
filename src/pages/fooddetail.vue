@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header ref="userData" />
-    <HeaderDetail :title="myTitle" />
+    <HeaderDetail :title="myTitle" ref="headerDetail"/>
     <div class="food-detail-wrap">
       <div class="food-detail-inner-wrap">
         <div class="food-detail-img">
@@ -47,7 +47,7 @@
           </div>
         </div>
         <div class="button-wrap">
-          <a href="cart" v-on:click="addCarts" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />カートへ追加する</a>
+          <a href="#" v-on:click="addCarts" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />カートへ追加する</a>
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@ import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation} from 'aws-amplify'
-import { getItems, /*listItemLists*/ } from '../graphql/queries'
+import { getItems } from '../graphql/queries'
 import { createCarts } from '../graphql/mutations'
 import { tsImportEqualsDeclaration } from '@babel/types'
 
@@ -72,11 +72,11 @@ export default {
     }
   },
   data () {
-  return {
-      myTitle: '' /*['items.item_name']*/,
-      items: {},
-      riceOption: null,
-      soupOption: null,
+    return {
+        myTitle: '' /*['items.item_name']*/,
+        items: {},
+        riceOption: null,
+        soupOption: null,
     }
   },
   components: {
@@ -85,12 +85,12 @@ export default {
     Footer,
   },
   async created() {
-    await this.getItems()
+    await this.getItems();
   },
   methods: {
     async getItems() {
       const query = this.$route.query.id;
-      const items = await API.graphql(graphqlOperation(getItems,{item_id: query}));
+      const items = await API.graphql(graphqlOperation(getItems,{id: query}));
       console.log(items);
       this.items = items.data.getItems;
       console.log(this.items);
@@ -105,24 +105,23 @@ export default {
       this.itemLists = itemLists.data.listItemLists.items;
 
       this.itemLists.forEach((value) => {
-        if(value.item_id == query) {
+        if(value.id == query) {
           this.items = value;
           this.myTitle = value.item_name;
         }
       })*/
     },
-
     async addCarts() {
       const createCartsInput = {
-        item_id: this.items.item_id,
+        item_id: this.items.id,
         user_id: this.$refs.userData.users.attributes.sub,
         rice_option: this.riceOption,
         soup_option: this.soupOption,
       };
 
       await API.graphql(graphqlOperation(createCarts,{input: createCartsInput}));
-
-    }
+      await this.$refs.headerDetail.countCarts();
+    },
   },
 }
 </script>
