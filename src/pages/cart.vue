@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Header ref="userData" />
-    <HeaderDetail :title="myTitle" />
+    <Header ref="userData"/>
+    <HeaderDetail :title="myTitle" ref="headerDetail"/>
       <div class="cart-wrap">
         <div v-for="cart in carts" v-bind:key="cart.id" class="wrapper">
           <div class="product-img">
@@ -155,12 +155,12 @@ export default {
     Footer,
   },
   async created() {
+    const userData = await Auth.currentAuthenticatedUser();
+    this.user_id = userData.attributes.sub;
     await this.listCarts();
   },
   methods: {
     async listCarts() {
-      const userData = await Auth.currentAuthenticatedUser();
-      this.user_id = userData.attributes.sub;
       const carts = await API.graphql(
         graphqlOperation(
           listCarts, {
@@ -180,18 +180,8 @@ export default {
         id: cart.id
       };
       await API.graphql(graphqlOperation(deleteCarts,{input: deleteCartsInput}));
-      const carts = await API.graphql(
-        graphqlOperation(
-          listCarts, {
-            filter: {
-              user_id: {
-                eq: this.user_id
-              }
-            }
-          }
-        )
-      );
-      this.carts = carts.data.listCarts.items;
+      this.listCarts();
+      await this.$refs.headerDetail.countCarts();  
     },
     getPrice(cart) {
       let price = Number(cart.items.item_price);

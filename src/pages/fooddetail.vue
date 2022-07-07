@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header ref="userData" />
-    <HeaderDetail :title="myTitle" />
+    <HeaderDetail :title="myTitle" ref="headerDetail"/>
     <div class="food-detail-wrap">
       <div class="food-detail-inner-wrap">
         <div class="food-detail-img">
@@ -47,7 +47,7 @@
           </div>
         </div>
         <div class="button-wrap">
-          <a href="cart" v-on:click="addCarts" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />カートへ追加する</a>
+          <a href="#" v-on:click="addCarts" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />カートへ追加する</a>
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@ import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation} from 'aws-amplify'
-import { getItems, /*listItemLists*/ } from '../graphql/queries'
+import { getItems } from '../graphql/queries'
 import { createCarts } from '../graphql/mutations'
 import { tsImportEqualsDeclaration } from '@babel/types'
 
@@ -72,11 +72,11 @@ export default {
     }
   },
   data () {
-  return {
-      myTitle: '' /*['items.item_name']*/,
-      items: {},
-      riceOption: null,
-      soupOption: null,
+    return {
+        myTitle: '' /*['items.item_name']*/,
+        items: {},
+        riceOption: null,
+        soupOption: null,
     }
   },
   components: {
@@ -85,7 +85,7 @@ export default {
     Footer,
   },
   async created() {
-    await this.getItems()
+    await this.getItems();
   },
   methods: {
     async getItems() {
@@ -111,7 +111,6 @@ export default {
         }
       })*/
     },
-
     async addCarts() {
       const createCartsInput = {
         item_id: this.items.id,
@@ -121,8 +120,8 @@ export default {
       };
 
       await API.graphql(graphqlOperation(createCarts,{input: createCartsInput}));
-
-    }
+      await this.$refs.headerDetail.countCarts();
+    },
   },
 }
 </script>

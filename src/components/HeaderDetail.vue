@@ -21,7 +21,8 @@
           <v-tab>
             <v-badge
               color="pink"
-              dot
+              v-bind:value="count"
+              v-bind:content="count"
             >
               <a href="cart"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="color: black;" /></a>
             </v-badge>
@@ -36,8 +37,40 @@
 </template>
 
 <script>
+import { API, graphqlOperation} from 'aws-amplify'
+import { listCarts } from '../graphql/queries'
+import Auth from "@aws-amplify/auth";
+
 export default {
- props: ['title']
+  props: ['title'],
+  data () {
+    return {
+      userId: "",
+      count: 0,
+    }
+  },
+  async created() {
+    const userData = await Auth.currentAuthenticatedUser();
+    this.userId = userData.attributes.sub;
+    await this.countCarts();
+  },
+  methods: {
+    async countCarts() {
+      const carts = await API.graphql(
+        graphqlOperation(
+          listCarts, {
+            filter: {
+              user_id: {
+                eq: this.userId
+              }
+            }
+          }
+        )
+      );
+      this.count = carts.data.listCarts.items.length;
+      console.log(this.count);
+    }
+  }
 }
 </script>
 
