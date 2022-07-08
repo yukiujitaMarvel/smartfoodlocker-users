@@ -52,3 +52,14 @@ type PayInfo @ model {
     card_number: Int
     expiry: Int
 }
+
+type Tickets @ model {
+    id: ID! @primaryKey
+    ticket_img: String
+    ticket_title: String
+    ticket_content: String
+    start_use: AWSDateTime
+    expiry: AWSDateTime
+    create_user: ID
+    update_user: ID
+}
