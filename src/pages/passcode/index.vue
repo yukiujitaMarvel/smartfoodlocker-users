@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <HeaderPasscord />
+    <HeaderDetail :title="myTitle" ref="headerDetail"/>
       <div class="passcode-wrap">
         <div class="passcode-inner-wrap">
           <div class="passcode-img">
@@ -29,7 +29,7 @@
 
 <script>
 import Header from '~/components/Header'
-import HeaderPasscord from '~/components/HeaderPasscord'
+import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 
 export default {
@@ -38,9 +38,14 @@ export default {
       title: '注文完了 | smartfoodlocker'
     }
   },
+  data () {
+    return {
+      myTitle: '商品受取' /*['items.item_name']*/,
+    }
+  },
   components: {
     Header,
-    HeaderPasscord,
+    HeaderDetail,
     Footer,
   },
 }
