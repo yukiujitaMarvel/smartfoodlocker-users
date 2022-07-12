@@ -82,6 +82,7 @@ export default {
 }
 .mypage-header{
   background-color: #EA5303;
+  color: white;
   padding: 5px 10px;
 }
 .mypage-header h1{

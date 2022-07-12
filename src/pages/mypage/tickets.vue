@@ -14,6 +14,7 @@
                 <img src="https://cdn.vuetifyjs.com/images/cards/cooking.png" alt="">
               </div>
               <div class="ticket-contents">
+                <h3>test</h3>
                 <p>testtesttest</p>
                 <p>testtesttest</p>
                 <p>testtesttest</p>
@@ -28,6 +29,7 @@
                 <img src="https://cdn.vuetifyjs.com/images/cards/cooking.png" alt="">
               </div>
               <div class="ticket-contents">
+                <h3>test</h3>
                 <p>testtesttest</p>
                 <p>testtesttest</p>
                 <p>testtesttest</p>
@@ -42,6 +44,7 @@
                 <img src="https://cdn.vuetifyjs.com/images/cards/cooking.png" alt="">
               </div>
               <div class="ticket-contents">
+                <h3>test</h3>
                 <p>testtesttest</p>
                 <p>testtesttest</p>
                 <p>testtesttest</p>
@@ -50,6 +53,7 @@
               <Modal />
             </div>
           </div>
+          
           
         </div>
       </div>
@@ -101,6 +105,7 @@ export default {
 }
 .mypage-header{
   background-color: #EA5303;
+  color: white;
   padding: 5px 10px;
 }
 .mypage-header h1{
@@ -129,6 +134,9 @@ export default {
 .ticket-contents{
   text-align: left;
   padding: 10px;
+}
+.ticket-contents h3 {
+  margin-bottom: 16px;
 }
 .ticket-contents p{
   font-size: 12px;
