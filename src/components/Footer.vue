@@ -10,7 +10,8 @@
 </template>
 
 <style scoped>
-.theme--dark.v-footer {
+.theme--light.v-footer {
   background-color: #EA5303;
+  color: white;
 }
 </style>

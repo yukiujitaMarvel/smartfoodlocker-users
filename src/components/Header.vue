@@ -32,7 +32,7 @@
               <div v-else>
                 <a href="/login">
                   <div class="my-2">
-                    <v-btn color="warning" dark>
+                    <v-btn color="warning">
                       ログインはこちら
                     </v-btn>
                   </div>
@@ -133,7 +133,7 @@ h3{
 .icon{
   text-align: right;
 }
-.theme--dark.v-expansion-panels .v-expansion-panel{
+.theme--light.v-toolbar.v-sheet {
   background-color: #EA5303 ;
 }
 .drawer{
@@ -144,6 +144,7 @@ h3{
   border-bottom: 1px solid white;
   padding: 10px;
   margin-bottom: 20px;
+  color: white;
 }
 .drawer-title h1{
   font-size: 16px;
@@ -152,6 +153,21 @@ h3{
   font-size: 28px;
   font-weight: bold;
 }
+.theme--light.v-expansion-panels .v-expansion-panel{
+  background-color: #EA5303;
+}
+.v-application--is-ltr .v-expansion-panel-header{
+  color: white;
+}
+.theme--light.v-icon {
+  color: white ;
+}
+.theme--light.v-expansion-panels .v-expansion-panel-header .v-expansion-panel-header__icon .v-icon {
+  color: white;
+}
+.theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled){
+  color: white;
+}
 .v-list-item{
   border-bottom: 1px solid white;
   padding: 10px 10px 10px 23px;
@@ -159,9 +175,9 @@ h3{
 .v-expansion-panel-header:hover{
   background-color: #e96722;
 }
-.theme--dark.v-toolbar.v-sheet {
+/* .theme--dark.v-toolbar.v-sheet {
   background-color: #EA5303;
-}
+} */
 .v-application a {
   text-decoration: none;
   color: white;

@@ -10,6 +10,15 @@
             <p>{{ items.item_price }}<span>taxin</span></p>
           </div>
         </div>
+        <div>
+          <v-text-field
+              v-model="benched"
+              type="number"
+              label="個数"
+              min="0"
+              max="10"
+            ></v-text-field>
+        </div>
         <div class="food-detail-menu" v-if="items.category_id == '01'">
           <div class="food-detail-title title-top">
             <div class="food-title">
@@ -73,6 +82,7 @@ export default {
   },
   data () {
     return {
+        benched: 1,
         myTitle: '' /*['items.item_name']*/,
         items: {},
         riceOption: null,
