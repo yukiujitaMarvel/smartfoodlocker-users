@@ -3,31 +3,155 @@
     <Header />
     <HeaderDetail :title="myTitle" />
       <div class="order-wrap">
-        <div class="order-inner-wrap">
-          <div class="order-info">
-            <h1>注文情報</h1>
-            <ol class="order-list">
-              <li v-for="cart in carts" v-bind:key="cart.id">
-                {{cart.items.item_name}}
-                <div v-if="cart.items.category_id === '01'">
-                  <span v-if="cart.rice_option === '01'" class="amount">少なめ</span>
-                  <span v-else-if="cart.rice_option === '02'" class="amount">普通</span>
-                  <span v-else class="amount">多め</span>
-                  <span v-if="cart.soup_option === '02'">味噌汁</span>
-                </div>
-              </li>             
-              <!--<li>デリサラダ</li>-->
-            </ol>
-            <div class="total-price">
-              <p>¥{{totalPrice.toLocaleString()}}</p>
-            </div>
+        <div class="order-info">
+          <h1>注文情報</h1>
+          <ol class="order-list">
+            <li v-for="cart in carts" v-bind:key="cart.id">
+              {{cart.items.item_name}}
+              <div v-if="cart.items.category_id === '01'">
+                <span v-if="cart.rice_option === '01'" class="amount">少なめ</span>
+                <span v-else-if="cart.rice_option === '02'" class="amount">普通</span>
+                <span v-else class="amount">多め</span>
+                <span v-if="cart.soup_option === '02'">味噌汁</span>
+              </div>
+            </li>             
+            <!--<li>デリサラダ</li>-->
+          </ol>
+          <div class="total-price">
+            <p>¥{{totalPrice.toLocaleString()}}</p>
           </div>
-          <div class="pay-info">
-            <h1>支払情報</h1>
-            <p>VISA</p>
-            <p>1234-5678-9123-4567</p>
-          </div>     
         </div>
+        <div class="pay-info">
+          <h1>支払い情報</h1>
+          <v-radio-group
+            v-model="pay_info"
+            column
+          >
+            <div class="card-info">
+              <v-radio
+              label="VISA"
+              value="radio-1"
+              ></v-radio>
+              <p>**** **** ****1234</p>
+
+            </div>
+            
+            <div class="card-info">
+              <v-radio
+              label="JCB"
+              value="radio-2"
+              ></v-radio>
+              <p>**** **** ****1234</p>
+            </div>
+            
+          </v-radio-group>
+        </div>
+        <div class="pickup_time">
+          <h1>受取時間</h1>
+          <v-radio-group
+            v-model="pickup_time"
+            column
+          >
+            <div class="pickup_time_select">
+              <v-radio
+                label="今すぐ"
+                value="radio-1"
+              ></v-radio>
+              <p>20分~40分</p>
+            </div>
+            <dir class="pickup_time_select">
+              <v-radio
+                label="予約する"
+                value="radio-2"
+                @click="reserve"
+              ></v-radio>
+              <p>7/13(水)13:45~14:15</p>
+            </dir>
+          </v-radio-group>
+        </div>  
+        <div class="pickup_place">
+          <h1>受取場所</h1>
+          <v-radio-group
+            v-model="pickup_place"
+            column
+          >
+            <v-radio
+              label="テスト1"
+              value="radio-1"
+            ></v-radio>
+            <v-radio
+              label="テスト2"
+              value="radio-2"
+            ></v-radio>
+          </v-radio-group>
+        </div>   
+
+        <v-row>
+          <v-dialog
+            v-model="dialog"
+            fullscreen
+            hide-overlay
+            transition="dialog-bottom-transition"
+          >
+            <v-card>
+              <v-toolbar
+                dark
+                color="orange"
+              >
+                <v-btn
+                  icon
+                  dark
+                  @click="dialog = false"
+                >
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>予約する</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                  
+                </v-toolbar-items>
+              </v-toolbar>
+
+              <template>
+                <v-container fluid>
+                  <v-row align="center">
+                    <v-col
+                      class="d-flex"
+                      cols="12"
+                      sm="6"
+                    >
+                      <v-select
+                        :items="items"
+                        label="今日、7月13日(水)"
+                        outlined
+                      ></v-select>
+                    </v-col>
+                    
+                    <v-col
+                      class="d-flex"
+                      cols="12"
+                      sm="6"
+                    >
+                      <v-select
+                        :items="items"
+                        label="13:45-14:15"
+                        outlined
+                      ></v-select>
+                    </v-col>
+
+                  </v-row>
+                </v-container>
+              </template>
+
+              <div class="button-wrap">
+                <a href="#" class="btn btn--orange btn-c">予約する</a>
+              </div>
+              
+            </v-card>
+          </v-dialog>
+        </v-row>
+
+
         <div class="button-wrap">
           <a href="#" v-on:click="addOrders" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-check" style="margin-right:20px;" />確定する</a>
         </div>
@@ -53,10 +177,16 @@ export default {
   },
   data () {
   return {
+     dialog: false,
      myTitle: '支払い情報',
      carts: [],
      user_id: '',
      totalPrice: 0,
+
+     pay_info: '',
+     pickup_time: '',
+     pickup_place: '',
+     items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
     }
   },
   components: {
@@ -71,6 +201,9 @@ export default {
     this.totalPrice = this.getTotalPrice(this.carts);
   },
   methods: {
+    reserve(){
+      this.dialog = true
+    },
     async listCarts() {
       const carts = await API.graphql(
         graphqlOperation(
@@ -132,19 +265,14 @@ export default {
   padding: 20px;
   height: 100%;
 }
-.order-inner-wrap{
-  width: 60%;
-  height: 100%;
-  margin: 0 auto;
-  padding: 20px;
-  box-shadow: 0 0 8px gray;
-}
 h1{
   font-size: 12px;
+  color: #EA5303;
   padding: 10px 0 10px 0;
 }
 .order-list{
   font-weight: bold;
+  color: gray;
 }
 span{
   font-size: 10px;
@@ -160,10 +288,35 @@ span{
 .order-info{
   border-bottom: 1px solid #ddd;
 }
-.pay-info p{
-  font-weight: bold;
+.pay-info{
+  border-bottom: 1px solid #ddd;
+}
+.pickup_time{
+  border-bottom: 1px solid #ddd;
+}
+.pickup_place{
+  border-bottom: 1px solid #ddd;
+}
+.card-info{
+  display: flex;
+  justify-content: space-between;
+}
+.card-info p{
   margin: 0;
 }
+.v-toolbar__title{
+  font-weight: bold;
+}
+.pickup_time_select{
+  display: flex;
+  justify-content: space-between;
+}
+.pickup_time_select p {
+  margin: 0;
+
+}
+
+
 
 
 /* ボタン */
