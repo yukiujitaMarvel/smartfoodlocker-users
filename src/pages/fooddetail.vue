@@ -46,11 +46,11 @@
             <fieldset>
               <input id="item-4" class="radio-inline__input" type="radio" name="soup-option" v-model="soupOption" value="01"/>
               <label class="radio-inline__label" for="item-4">
-                  少なめ
+                  不要
               </label>
               <input id="item-5" class="radio-inline__input" type="radio" name="soup-option" v-model="soupOption" value="02"/>
               <label class="radio-inline__label" for="item-5">
-                  普通
+                  要
               </label>
             </fieldset>
           </div>

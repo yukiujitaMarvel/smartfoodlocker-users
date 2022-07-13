@@ -10,7 +10,7 @@
               <li v-for="cart in carts" v-bind:key="cart.id">
                 {{cart.items.item_name}}
                 <div v-if="cart.items.category_id === '01'">
-                  <span v-if="cart.rice_option === '01'" class="amount">少な目</span>
+                  <span v-if="cart.rice_option === '01'" class="amount">少なめ</span>
                   <span v-else-if="cart.rice_option === '02'" class="amount">普通</span>
                   <span v-else class="amount">多め</span>
                   <span v-if="cart.soup_option === '02'">味噌汁</span>
