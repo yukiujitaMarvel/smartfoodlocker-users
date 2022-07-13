@@ -150,6 +150,7 @@ export const createCarts = /* GraphQL */ `
       }
       rice_option
       soup_option
+      item_num
       createdAt
       updatedAt
     }
@@ -190,6 +191,7 @@ export const updateCarts = /* GraphQL */ `
       }
       rice_option
       soup_option
+      item_num
       createdAt
       updatedAt
     }
@@ -230,6 +232,7 @@ export const deleteCarts = /* GraphQL */ `
       }
       rice_option
       soup_option
+      item_num
       createdAt
       updatedAt
     }
@@ -242,22 +245,18 @@ export const createOrders = /* GraphQL */ `
   ) {
     createOrders(input: $input, condition: $condition) {
       id
-      item_id
-      items {
-        id
-        item_img
-        category_id
-        item_name
-        item_price
-        release
-        deleteAt
-        item_stock
-        create_user
-        update_user
-        delete_user
-        logical_deletion_flg
-        createdAt
-        updatedAt
+      order_detail {
+        items {
+          id
+          cart_id
+          item_id
+          rice_option
+          soup_option
+          item_num
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
       user_id
       users {
@@ -268,11 +267,11 @@ export const createOrders = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      total_price
+      pickup_place
+      pickup_time
       statas
       lock_flg
-      item_num
-      create_user
-      update_user
       createdAt
       updatedAt
     }
@@ -285,22 +284,18 @@ export const updateOrders = /* GraphQL */ `
   ) {
     updateOrders(input: $input, condition: $condition) {
       id
-      item_id
-      items {
-        id
-        item_img
-        category_id
-        item_name
-        item_price
-        release
-        deleteAt
-        item_stock
-        create_user
-        update_user
-        delete_user
-        logical_deletion_flg
-        createdAt
-        updatedAt
+      order_detail {
+        items {
+          id
+          cart_id
+          item_id
+          rice_option
+          soup_option
+          item_num
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
       user_id
       users {
@@ -311,11 +306,11 @@ export const updateOrders = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      total_price
+      pickup_place
+      pickup_time
       statas
       lock_flg
-      item_num
-      create_user
-      update_user
       createdAt
       updatedAt
     }
@@ -328,6 +323,46 @@ export const deleteOrders = /* GraphQL */ `
   ) {
     deleteOrders(input: $input, condition: $condition) {
       id
+      order_detail {
+        items {
+          id
+          cart_id
+          item_id
+          rice_option
+          soup_option
+          item_num
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      user_id
+      users {
+        user_id
+        user_name
+        user_email
+        user_number
+        createdAt
+        updatedAt
+      }
+      total_price
+      pickup_place
+      pickup_time
+      statas
+      lock_flg
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createOrderDetail = /* GraphQL */ `
+  mutation CreateOrderDetail(
+    $input: CreateOrderDetailInput!
+    $condition: ModelOrderDetailConditionInput
+  ) {
+    createOrderDetail(input: $input, condition: $condition) {
+      id
+      cart_id
       item_id
       items {
         id
@@ -345,20 +380,75 @@ export const deleteOrders = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      user_id
-      users {
-        user_id
-        user_name
-        user_email
-        user_number
+      rice_option
+      soup_option
+      item_num
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateOrderDetail = /* GraphQL */ `
+  mutation UpdateOrderDetail(
+    $input: UpdateOrderDetailInput!
+    $condition: ModelOrderDetailConditionInput
+  ) {
+    updateOrderDetail(input: $input, condition: $condition) {
+      id
+      cart_id
+      item_id
+      items {
+        id
+        item_img
+        category_id
+        item_name
+        item_price
+        release
+        deleteAt
+        item_stock
+        create_user
+        update_user
+        delete_user
+        logical_deletion_flg
         createdAt
         updatedAt
       }
-      statas
-      lock_flg
+      rice_option
+      soup_option
       item_num
-      create_user
-      update_user
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteOrderDetail = /* GraphQL */ `
+  mutation DeleteOrderDetail(
+    $input: DeleteOrderDetailInput!
+    $condition: ModelOrderDetailConditionInput
+  ) {
+    deleteOrderDetail(input: $input, condition: $condition) {
+      id
+      cart_id
+      item_id
+      items {
+        id
+        item_img
+        category_id
+        item_name
+        item_price
+        release
+        deleteAt
+        item_stock
+        create_user
+        update_user
+        delete_user
+        logical_deletion_flg
+        createdAt
+        updatedAt
+      }
+      rice_option
+      soup_option
+      item_num
       createdAt
       updatedAt
     }

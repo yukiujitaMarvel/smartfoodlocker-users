@@ -32,19 +32,29 @@ type Carts @model {
     users: Users @hasOne(fields: ["user_id"])
     rice_option: String
     soup_option: String
+    item_num: Int
 }
 
 type Orders @model {
     id: ID! @primaryKey
-    item_id: ID!
-    items: Items @hasOne(fields: ["item_id"])
+    order_detail: [OrderDetail] @hasMany(fields: ["id"]) 
     user_id: ID!
     users: Users @hasOne(fields: ["user_id"])
+    total_price: Int
+    pickup_place: String
+    pickup_time: AWSDateTime
     statas: String
     lock_flg: Boolean
+}
+
+type OrderDetail @model {
+    id: ID! @primaryKey(sortKeyFields: ["cart_id"])
+    cart_id: ID!
+    item_id: ID!
+    items: Items @hasOne(fields: ["item_id"])
+    rice_option: String
+    soup_option: String
     item_num: Int
-    create_user: ID
-    update_user: ID
 }
 
 type PayInfo @ model {
