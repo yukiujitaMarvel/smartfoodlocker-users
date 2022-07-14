@@ -243,6 +243,7 @@ export default {
 .product-text {
   height: 100%;
   width: 100%;
+  position: relative;
 }
 
 .product-text h1 {
@@ -260,7 +261,7 @@ export default {
 .product-text h2 {
   font-size: 12px;
   font-weight: 400;
-  padding: 10px 20px 10px 20px;
+  padding: 5px 20px 5px 20px;
   text-transform: uppercase;
   color: #1a1919;
   letter-spacing: 0.2em;
@@ -281,12 +282,10 @@ export default {
   height: 103px;
   width: 100%;
   margin-top: 17px;
-  position: relative;
 }
 
 .product-price-btn p {
   display: inline-block;
-  position: absolute;
   top: -13px;
   height: 50px;
   font-family: 'Trocchi', serif;
@@ -305,7 +304,8 @@ span {
 }
 
 .v-btn--fab.v-size--large.v-btn--absolute.v-btn--top{
-  top: 50px;
+  position: absolute;
+  top: 170px;
 }
 
 .v-btn--fab.v-size--large{
@@ -338,7 +338,6 @@ a.btn--orange:hover {
 
 a.btn-c {
   font-size: 16px;
-  position: relative;
   padding: 20px;
   border-radius: 100vh;
 }
@@ -392,7 +391,6 @@ a.btn-c i.fa {
 }
 .product-price-btn p {
   display: inline-block;
-  position: absolute;
   top: -13px;
   height: 50px;
   font-family: 'Trocchi', serif;
@@ -407,7 +405,7 @@ span {
 }
 
 .v-btn--fab.v-size--large.v-btn--absolute.v-btn--top{
-  top: 15px;
+  top: 115px;
 }
 }
 </style>
