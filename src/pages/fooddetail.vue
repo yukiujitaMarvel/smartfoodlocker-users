@@ -15,7 +15,7 @@
               v-model="benched"
               type="number"
               label="個数"
-              min="0"
+              min="1"
               max="10"
             ></v-text-field>
         </div>
@@ -85,8 +85,8 @@ export default {
         benched: 1,
         myTitle: '' /*['items.item_name']*/,
         items: {},
-        riceOption: null,
-        soupOption: null,
+        riceOption: "",
+        soupOption: "",
     }
   },
   components: {
@@ -127,6 +127,7 @@ export default {
         user_id: this.$refs.userData.users.attributes.sub,
         rice_option: this.riceOption,
         soup_option: this.soupOption,
+        item_num: this.benched,
       };
 
       await API.graphql(graphqlOperation(createCarts,{input: createCartsInput}));

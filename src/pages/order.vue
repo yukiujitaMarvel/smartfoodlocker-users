@@ -13,6 +13,7 @@
                 <span v-else-if="cart.rice_option === '02'" class="amount">普通</span>
                 <span v-else class="amount">多め</span>
                 <span v-if="cart.soup_option === '02'">味噌汁</span>
+                <span>数量:{{cart.item_num}}</span>
               </div>
             </li>             
             <!--<li>デリサラダ</li>-->
@@ -59,14 +60,14 @@
               ></v-radio>
               <p>20分~40分</p>
             </div>
-            <dir class="pickup_time_select">
+            <div class="pickup_time_select">
               <v-radio
                 label="予約する"
                 value="radio-2"
                 @click="reserve"
               ></v-radio>
               <p>7/13(水)13:45~14:15</p>
-            </dir>
+            </div>
           </v-radio-group>
         </div>  
         <div class="pickup_place">
@@ -166,7 +167,7 @@ import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation } from 'aws-amplify'
 import { listCarts } from '../graphql/queries'
-import { createOrders, deleteCarts } from '../graphql/mutations'
+import { createOrders, createOrderDetail, deleteCarts } from '../graphql/mutations'
 import Auth from "@aws-amplify/auth";
 
 export default {
@@ -220,21 +221,33 @@ export default {
       console.log(this.carts[0]?.item_id);
     },
     async addOrders() {
+      const dt = new Date();
+      const isoStr = dt.toISOString();
+
+      const createOrdersInput = {
+        user_id: this.user_id,
+        total_price: this.totalPrice,
+        pickup_place: this.pickup_place,
+        pickup_time: isoStr,
+        status: "01",
+        lock_flg: false,
+      };
+      const result = await API.graphql(graphqlOperation(createOrders,{input: createOrdersInput}));
+
       const promises = this.carts.map(async (cart) => {
-        const createOrdersInput = {
+        const createOrederDetailInput = {
+          id: result.data.createOrders.id,
+          cart_id: cart.id,
           item_id: cart.item_id,
-          user_id: this.user_id,
-          statas: "01",
-          lock_flg: false,
-          item_num: 1,
-          create_user: this.user_id,
-          update_user: this.user_id,
-        };
+          rice_option: cart.rice_option,
+          soup_option: cart.soup_option,
+          item_num: cart.item_num,
+        };        
         const deleteCartsInput = {
           id: cart.id
         };
-        await API.graphql(graphqlOperation(createOrders,{input: createOrdersInput}))
-        await API.graphql(graphqlOperation(deleteCarts,{input: deleteCartsInput}))
+        await API.graphql(graphqlOperation(createOrderDetail,{input: createOrederDetailInput}));
+        await API.graphql(graphqlOperation(deleteCarts,{input: deleteCartsInput}));
       });
       await Promise.all(promises);
 
@@ -243,13 +256,14 @@ export default {
     getTotalPrice(carts) {
       let totalPrice = 0;
       carts.forEach((cart) => {
-        let price = Number(cart.items.item_price);
+        let price = cart.items.item_price;
         if(cart.rice_option === '03') {
           price = price + 30;
         }
         if(cart.soup_option === '02') {
           price = price + 50;
         }
+        price = price * cart.item_num;
         totalPrice = totalPrice + price;
       });
       return totalPrice;
