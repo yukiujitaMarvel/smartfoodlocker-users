@@ -270,7 +270,7 @@ export const createOrders = /* GraphQL */ `
       total_price
       pickup_place
       pickup_time
-      statas
+      status
       lock_flg
       createdAt
       updatedAt
@@ -309,7 +309,7 @@ export const updateOrders = /* GraphQL */ `
       total_price
       pickup_place
       pickup_time
-      statas
+      status
       lock_flg
       createdAt
       updatedAt
@@ -348,7 +348,7 @@ export const deleteOrders = /* GraphQL */ `
       total_price
       pickup_place
       pickup_time
-      statas
+      status
       lock_flg
       createdAt
       updatedAt

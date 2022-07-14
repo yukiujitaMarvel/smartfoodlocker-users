@@ -23,6 +23,7 @@
                 <span v-else>要</span>
                 <span v-if="cart.soup_option === '02'">¥50</span>
               </h2>
+              <h2>数量<span>{{cart.item_num}}</span></h2>
               <div class="product-price-btn">
                 <p>¥{{getPrice(cart)}}円</p>
                 <v-btn
@@ -184,18 +185,16 @@ export default {
       await this.$refs.headerDetail.countCarts();  
     },
     getPrice(cart) {
-      let price = Number(cart.items.item_price);
-      console.log(price);
+      let price = cart.items.item_price;
 
       if(cart.rice_option === '03') {
         price = price + 30;
-        console.log(price);
       }
       if(cart.soup_option === '02') {
         price = price + 50;
-        console.log(price);
       }
-      console.log(price);
+
+      price = price * cart.item_num;
 
       return price;
     }

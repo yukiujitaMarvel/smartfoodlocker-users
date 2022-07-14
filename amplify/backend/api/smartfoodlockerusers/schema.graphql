@@ -43,7 +43,7 @@ type Orders @model {
     total_price: Int
     pickup_place: String
     pickup_time: AWSDateTime
-    statas: String
+    status: String
     lock_flg: Boolean
 }
 
