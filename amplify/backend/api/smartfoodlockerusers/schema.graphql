@@ -2,19 +2,14 @@
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
 input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
-type Items @model{
+type Items @model {
     id: ID! @primaryKey
     item_img: String
-    category_id: ID!
     item_name: String
     item_price: Int
-    release: Boolean
-    deleteAt: AWSDateTime
     item_stock: Int
-    create_user: ID
-    update_user: ID
-    delete_user: ID
-    logical_deletion_flg: Boolean
+    release_day: String
+    item_detail: String  
 }
 
 type Users @model {
@@ -37,12 +32,13 @@ type Carts @model {
 
 type Orders @model {
     id: ID! @primaryKey
-    order_detail: [OrderDetail] @hasMany(fields: ["id"]) 
     user_id: ID!
     users: Users @hasOne(fields: ["user_id"])
+    item_id: ID!
+    items: Items @hasOne(fields: ["item_id"])
     total_price: Int
     pickup_place: String
-    pickup_time: AWSDateTime
+    pickup_time: String
     status: String
     lock_flg: Boolean
 }
@@ -57,13 +53,13 @@ type OrderDetail @model {
     item_num: Int
 }
 
-type PayInfo @ model {
+type PayInfo @model {
     user_id: ID! @primaryKey
     card_number: Int
     expiry: Int
 }
 
-type Tickets @ model {
+type Tickets @model {
     id: ID! @primaryKey
     ticket_img: String
     ticket_title: String
@@ -73,3 +69,12 @@ type Tickets @ model {
     create_user: ID
     update_user: ID
 }
+
+type Schedules @model {
+    id: ID! @primaryKey
+    merchant_id: ID!
+    holiday_flg: Boolean
+    date: String
+    start_time: String
+    finish_time: String
+} 
