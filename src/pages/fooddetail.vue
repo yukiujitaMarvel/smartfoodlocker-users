@@ -4,9 +4,9 @@
     <HeaderDetail :title="myTitle" ref="headerDetail"/>
     <div class="food-detail-wrap">
       <div class="food-detail-inner-wrap">
-        <!-- <div class="select-day">
+        <div class="select-day">
           <h3>7/15</h3>
-        </div> -->
+        </div>
         <div class="select-day">
           <h3>2022/7/15,11:45~12:00</h3>
         </div>
