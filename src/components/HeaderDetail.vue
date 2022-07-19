@@ -18,7 +18,7 @@
         </v-spacer>
 
         <v-btn icon>
-          <v-tab>
+          <!-- <v-tab>
             <v-badge
               color="pink"
               v-bind:value="count"
@@ -26,7 +26,7 @@
             >
               <a href="cart"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="color: black;" /></a>
             </v-badge>
-          </v-tab>
+          </v-tab> -->
           <!-- <span>
           <font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="color: black;" />
         </span> -->
