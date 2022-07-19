@@ -1,20 +1,20 @@
 <template>
   <div>
     <Header />
-    <MenuList />
+    <MenuLists />
     <Footer />
   </div>
 </template>
 
 <script>
 import Header from '~/components/Header'
-import MenuList from '~/components/MenuList'
+import MenuLists from '~/components/MenuLists'
 import Footer from '~/components/Footer'
 
 export default {
   components: {
     Header,
-    MenuList,
+    MenuLists,
     Footer,
   },
   // middleware: 'auth'
