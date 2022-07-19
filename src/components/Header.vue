@@ -70,7 +70,7 @@
               </v-expansion-panel>
             </v-expansion-panels> -->
             
-            <a href="orderhistory">
+            <a href="/mypage/reservelist">
               <v-list-item>
                 <v-badge
                   color="green"
@@ -84,7 +84,7 @@
               </v-list-item>
             </a>
 
-            <a href="orderhistory">
+            <a href="/mypage/tickets">
               <v-list-item>
                 <v-icon class="icon">mdi-ticket</v-icon>
                 <div class="menu-title">
@@ -93,7 +93,7 @@
               </v-list-item>
             </a>
 
-            <a href="orderhistory">
+            <a href="#">
               <v-list-item>
                 <v-icon class="icon">mdi-cog-outline</v-icon>
                 <div class="menu-title">

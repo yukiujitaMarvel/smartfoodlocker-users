@@ -262,7 +262,7 @@ export default {
       this.dialog = false
 
       setTimeout(() => {
-        let url = '/passcode'
+        let url = '/ordercomplete'
         window.location.href = url
       }, 1000)
     }
