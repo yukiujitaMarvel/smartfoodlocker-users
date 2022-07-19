@@ -40,7 +40,7 @@
               </div>
             </div>
 
-            <v-expansion-panels>
+            <!-- <v-expansion-panels>
               <v-expansion-panel
                 v-for="(item,i) in 1"
                 :key="i"
@@ -68,11 +68,37 @@
                    
                 </v-expansion-panel-content>
               </v-expansion-panel>
-            </v-expansion-panels>
+            </v-expansion-panels> -->
             
             <a href="orderhistory">
               <v-list-item>
-                <h3><font-awesome-icon icon="fa-solid fa-clock-rotate-left" />注文履歴</h3>
+                <v-badge
+                  color="green"
+                  dot
+                >
+                  <v-icon class="icon">mdi-history</v-icon>
+                </v-badge>
+                <div class="menu-title">
+                  <h3>注文予約履歴</h3>
+                </div>
+              </v-list-item>
+            </a>
+
+            <a href="orderhistory">
+              <v-list-item>
+                <v-icon class="icon">mdi-ticket</v-icon>
+                <div class="menu-title">
+                  <h3>チケット</h3>
+                </div>
+              </v-list-item>
+            </a>
+
+            <a href="orderhistory">
+              <v-list-item>
+                <v-icon class="icon">mdi-cog-outline</v-icon>
+                <div class="menu-title">
+                  <h3>設定</h3>
+                </div>
               </v-list-item>
             </a>
             <!-- <v-list-item>
@@ -126,24 +152,18 @@ export default {
 h3{
   font-size: 12px;
 }
-.svg-inline--fa{
-  font-size: 18px;
-  margin-right: 10px;
-}
-.icon{
-  text-align: right;
+.menu-title{
+  margin-left: 15px;
 }
 .theme--light.v-toolbar.v-sheet {
   background-color: #EA5303 ;
 }
 .drawer{
   background-color: #EA5303;
-  /* top:76px !important; */
 }
 .drawer-title{
   border-bottom: 1px solid white;
   padding: 10px;
-  margin-bottom: 20px;
   color: white;
 }
 .drawer-title h1{
@@ -170,20 +190,12 @@ h3{
 }
 .v-list-item{
   border-bottom: 1px solid white;
-  padding: 10px 10px 10px 23px;
+  padding: 10px;
 }
-.v-expansion-panel-header:hover{
-  background-color: #e96722;
-}
-/* .theme--dark.v-toolbar.v-sheet {
-  background-color: #EA5303;
-} */
+
 .v-application a {
   text-decoration: none;
   color: white;
-  font-weight: bold;
-}
-.v-btn:not(.v-btn--round).v-size--default{
   font-weight: bold;
 }
 </style>
