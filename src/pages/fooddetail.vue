@@ -70,7 +70,7 @@
         
 
         <div class="button-wrap">
-          <a href="#" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />予約する</a>
+          <a href="order" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />予約する</a>
         </div>
 
         <div class="button-wrap">

@@ -2,54 +2,60 @@
   <div>
     <div class="menu-wrap">
 
-      <div class="menu-list-wrap">
-        <div class="past-wrap"></div>
-        <div class="day">
-          <p>(金)</p>
-        </div>
-        <div class="menu-content">
-          <div class="menu-img"> 
-            <img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" alt="">
+      <a href="/fooddetail">
+        <div class="menu-list-wrap">
+          <div class="past-wrap"></div>
+          <div class="day">
+            <p>(金)</p>
           </div>
-          <div class="menu-detail">
-            <h1>エビチリ弁当</h1>
-            <p>¥500<span>tax in</span></p>
+          <div class="menu-content">
+            <div class="menu-img"> 
+              <img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" alt="">
+            </div>
+            <div class="menu-detail">
+              <h1>エビチリ弁当</h1>
+              <p>¥500<span>tax in</span></p>
+            </div>
           </div>
         </div>
-      </div>
+      </a>
 
-      <div class="menu-list-wrap today">
-        <div class="day">
-          <p>(金)</p>
-        </div>
-        <div class="menu-content">
-          <div class="menu-img"> 
-            <img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" alt="">
+      <a href="/fooddetail">
+        <div class="menu-list-wrap today">
+          <div class="day">
+            <p>(金)</p>
           </div>
-          <div class="menu-detail">
-            <h1>エビチリ弁当</h1>
-            <p>¥500<span>tax in</span></p>
+          <div class="menu-content">
+            <div class="menu-img"> 
+              <img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" alt="">
+            </div>
+            <div class="menu-detail">
+              <h1>エビチリ弁当</h1>
+              <p>¥500<span>tax in</span></p>
+            </div>
           </div>
         </div>
-      </div>
+      </a>
 
-      <div class="menu-list-wrap">
-        <div class="reserved">
-          <p>予約済み</p>
-        </div>
-        <div class="day">
-          <p>(金)</p>
-        </div>
-        <div class="menu-content">
-          <div class="menu-img"> 
-            <img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" alt="">
+      <a href="/fooddetail">
+        <div class="menu-list-wrap">
+          <div class="reserved">
+            <p>予約済み</p>
           </div>
-          <div class="menu-detail">
-            <h1>エビチリ弁当</h1>
-            <p>¥500<span>tax in</span></p>
+          <div class="day">
+            <p>(金)</p>
+          </div>
+          <div class="menu-content">
+            <div class="menu-img"> 
+              <img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" alt="">
+            </div>
+            <div class="menu-detail">
+              <h1>エビチリ弁当</h1>
+              <p>¥500<span>tax in</span></p>
+            </div>
           </div>
         </div>
-      </div>
+      </a>
 
       <div class="menu-list-wrap">
         <div class="day">
@@ -138,6 +144,10 @@ export default {
 </script>
 
 <style scoped>
+.v-application a {
+  text-decoration: none;
+  color: black;
+}
 .menu-wrap{
   width: 40%;
   height: 100vh;
