@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <HeaderDetail :title="myTitle" :color="myColor" ref="headerDetail"/>
+    <HeaderPasscord :title="myTitle" ref="headerDetail"/>
       <div class="passcode-wrap">
         <div class="passcode-inner-wrap">
           <div class="passcode-img">
@@ -29,7 +29,7 @@
 
 <script>
 import Header from '~/components/Header'
-import HeaderDetail from '~/components/HeaderDetail'
+import HeaderPasscord from '~/components/HeaderPasscord'
 import Footer from '~/components/Footer'
 
 export default {
@@ -41,12 +41,11 @@ export default {
   data () {
     return {
       myTitle: '商品受取' /*['items.item_name']*/,
-      myColor: 'background-color:red;'
     }
   },
   components: {
     Header,
-    HeaderDetail,
+    HeaderPasscord,
     Footer,
   },
 }
