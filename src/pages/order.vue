@@ -6,7 +6,7 @@
         <div class="order-info">
           <h1>注文情報</h1>
           <ol class="order-list">
-            <li v-for="cart in carts" v-bind:key="cart.id">
+            <!-- <li v-for="cart in carts" v-bind:key="cart.id">
               {{cart.items.item_name}}
               <div v-if="cart.items.category_id === '01'">
                 <span v-if="cart.rice_option === '01'" class="amount">少なめ</span>
@@ -15,11 +15,15 @@
                 <span v-if="cart.soup_option === '02'">味噌汁</span>
                 <span>数量:{{cart.item_num}}</span>
               </div>
-            </li>             
+            </li>              -->
+            <li>エビチリ弁当</li>
             <!--<li>デリサラダ</li>-->
           </ol>
-          <div class="total-price">
+          <!-- <div class="total-price">
             <p>¥{{totalPrice.toLocaleString()}}</p>
+          </div> -->
+          <div class="total-price">
+            <p>¥580</p>
           </div>
         </div>
         <div class="pay-info">
@@ -30,6 +34,14 @@
           >
             <div class="card-info">
               <v-radio
+              label="チケット(1/15)"
+              value="radio-1"
+              ></v-radio>
+              <p></p>
+            </div>
+
+            <div class="card-info">
+              <v-radio
               label="VISA"
               value="radio-1"
               ></v-radio>
@@ -37,19 +49,31 @@
 
             </div>
             
-            <div class="card-info">
+            <!-- <div class="card-info">
               <v-radio
               label="JCB"
               value="radio-2"
               ></v-radio>
               <p>**** **** ****1234</p>
-            </div>
+            </div> -->
             
           </v-radio-group>
         </div>
         <div class="pickup_time">
           <h1>受取時間</h1>
-          <v-radio-group
+          <v-row align="center">
+            <v-col
+              class="d-flex"
+              cols="12"
+              sm="6"
+            >
+              <v-select
+                :items="items"
+                label="7/15(金) 11:45~12:00"
+              ></v-select>
+            </v-col>
+          </v-row>
+          <!-- <v-radio-group
             v-model="pickup_time"
             column
           >
@@ -68,7 +92,7 @@
               ></v-radio>
               <p>7/13(水)13:45~14:15</p>
             </div>
-          </v-radio-group>
+          </v-radio-group> -->
         </div>  
         <div class="pickup_place">
           <h1>受取場所</h1>
@@ -87,7 +111,34 @@
           </v-radio-group>
         </div>   
 
-        <v-row>
+        <v-row justify="center">
+          <v-dialog
+            v-model="dialog"
+            persistent
+            max-width="290"
+          >
+            <v-card>
+              <v-card-title class="info-title">
+                重要なお知らせ
+              </v-card-title>
+              <v-card-text>ご注文された商品は必ずお受け取りください。<br>指定配達時間より1時間が経過しますと、商品ロッカー内から移動させて頂く場合がございます。</v-card-text>
+              <v-card-actions>
+                
+                <div class="info-btn-wrap">
+                  <button
+                    text
+                    class="info-btn"
+                    @click="dialog = false"
+                  >
+                    わかりました
+                  </button>
+                </div>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+
+        <!-- <v-row>
           <v-dialog
             v-model="dialog"
             fullscreen
@@ -150,11 +201,12 @@
               
             </v-card>
           </v-dialog>
-        </v-row>
+        </v-row> -->
 
 
         <div class="button-wrap">
-          <a href="#" v-on:click="addOrders" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-check" style="margin-right:20px;" />確定する</a>
+          <!-- <a href="#" v-on:click="addOrders" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-check" style="margin-right:20px;" />確定する</a> -->
+          <a href="#" v-on:click="Orders" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-check" style="margin-right:20px;" />確定する</a>
         </div>
       </div>
     <Footer />
@@ -179,7 +231,7 @@ export default {
   data () {
   return {
      dialog: false,
-     myTitle: '支払い情報',
+     myTitle: '注文内容',
      carts: [],
      user_id: '',
      totalPrice: 0,
@@ -195,79 +247,82 @@ export default {
     HeaderDetail,
     Footer,
   },
-  async created() {
-    const userData = await Auth.currentAuthenticatedUser();
-    this.user_id = userData.attributes.sub;
-    await this.listCarts();
-    this.totalPrice = this.getTotalPrice(this.carts);
-  },
+  // async created() {
+  //   const userData = await Auth.currentAuthenticatedUser();
+  //   this.user_id = userData.attributes.sub;
+  //   await this.listCarts();
+  //   this.totalPrice = this.getTotalPrice(this.carts);
+  // },
   methods: {
-    reserve(){
+    async Orders(){
       this.dialog = true
-    },
-    async listCarts() {
-      const carts = await API.graphql(
-        graphqlOperation(
-          listCarts, {
-            filter: {
-              user_id: {
-                eq: this.user_id
-              }
-            }
-          }
-        )
-      );
-      this.carts = carts.data.listCarts.items;
-      console.log(this.carts[0]?.item_id);
-    },
-    async addOrders() {
-      const dt = new Date();
-      const isoStr = dt.toISOString();
-
-      const createOrdersInput = {
-        user_id: this.user_id,
-        total_price: this.totalPrice,
-        pickup_place: this.pickup_place,
-        pickup_time: isoStr,
-        status: "01",
-        lock_flg: false,
-      };
-      const result = await API.graphql(graphqlOperation(createOrders,{input: createOrdersInput}));
-
-      const promises = this.carts.map(async (cart) => {
-        const createOrederDetailInput = {
-          id: result.data.createOrders.id,
-          cart_id: cart.id,
-          item_id: cart.item_id,
-          rice_option: cart.rice_option,
-          soup_option: cart.soup_option,
-          item_num: cart.item_num,
-        };        
-        const deleteCartsInput = {
-          id: cart.id
-        };
-        await API.graphql(graphqlOperation(createOrderDetail,{input: createOrederDetailInput}));
-        await API.graphql(graphqlOperation(deleteCarts,{input: deleteCartsInput}));
-      });
-      await Promise.all(promises);
-
-      window.location.href = "passcode";
-    },
-    getTotalPrice(carts) {
-      let totalPrice = 0;
-      carts.forEach((cart) => {
-        let price = cart.items.item_price;
-        if(cart.rice_option === '03') {
-          price = price + 30;
-        }
-        if(cart.soup_option === '02') {
-          price = price + 50;
-        }
-        price = price * cart.item_num;
-        totalPrice = totalPrice + price;
-      });
-      return totalPrice;
     }
+    // reserve(){
+    //   this.dialog = true
+    // },
+    // async listCarts() {
+    //   const carts = await API.graphql(
+    //     graphqlOperation(
+    //       listCarts, {
+    //         filter: {
+    //           user_id: {
+    //             eq: this.user_id
+    //           }
+    //         }
+    //       }
+    //     )
+    //   );
+    //   this.carts = carts.data.listCarts.items;
+    //   console.log(this.carts[0]?.item_id);
+    // },
+    // async addOrders() {
+    //   const dt = new Date();
+    //   const isoStr = dt.toISOString();
+
+    //   const createOrdersInput = {
+    //     user_id: this.user_id,
+    //     total_price: this.totalPrice,
+    //     pickup_place: this.pickup_place,
+    //     pickup_time: isoStr,
+    //     status: "01",
+    //     lock_flg: false,
+    //   };
+    //   const result = await API.graphql(graphqlOperation(createOrders,{input: createOrdersInput}));
+
+    //   const promises = this.carts.map(async (cart) => {
+    //     const createOrederDetailInput = {
+    //       id: result.data.createOrders.id,
+    //       cart_id: cart.id,
+    //       item_id: cart.item_id,
+    //       rice_option: cart.rice_option,
+    //       soup_option: cart.soup_option,
+    //       item_num: cart.item_num,
+    //     };        
+    //     const deleteCartsInput = {
+    //       id: cart.id
+    //     };
+    //     await API.graphql(graphqlOperation(createOrderDetail,{input: createOrederDetailInput}));
+    //     await API.graphql(graphqlOperation(deleteCarts,{input: deleteCartsInput}));
+    //   });
+    //   await Promise.all(promises);
+
+    //   window.location.href = "passcode";
+    // },
+    // getTotalPrice(carts) {
+    //   let totalPrice = 0;
+    //   carts.forEach((cart) => {
+    //     let price = cart.items.item_price;
+    //     if(cart.rice_option === '03') {
+    //       price = price + 30;
+    //     }
+    //     if(cart.soup_option === '02') {
+    //       price = price + 50;
+    //     }
+    //     price = price * cart.item_num;
+    //     totalPrice = totalPrice + price;
+    //   });
+    //   return totalPrice;
+    // }
   }  
 }
 </script>
@@ -328,6 +383,38 @@ span{
 .pickup_time_select p {
   margin: 0;
 
+}
+.v-dialog > .v-card > .v-card__title{
+  font-size: 16px;
+  font-weight: bold;
+  justify-content: space-around;
+}
+.theme--light.v-card > .v-card__text, .theme--light.v-card > .v-card__subtitle{
+  font-size: 16px;
+}
+.v-card__actions{
+  display: block;
+  text-align: center;
+}
+.info-btn-wrap{
+  padding: 10px;
+}
+.info-btn{
+  font-size: 12px;
+  border: 1px solid orange;
+  border-radius: 20px;
+  background-color: orange;
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+}
+.info-btn:hover{
+  font-size: 12px;
+  border: 1px solid orange;
+  border-radius: 20px;
+  background-color: white;
+  color: orange;
+  padding: 10px;
 }
 
 
