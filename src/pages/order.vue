@@ -128,7 +128,7 @@
                   <button
                     text
                     class="info-btn"
-                    @click="dialog = false"
+                    @click="order"
                   >
                     わかりました
                   </button>
@@ -256,6 +256,15 @@ export default {
   methods: {
     async Orders(){
       this.dialog = true
+    },
+
+    async order() {
+      this.dialog = false
+
+      setTimeout(() => {
+        let url = '/passcode'
+        window.location.href = url
+      }, 1000)
     }
     // reserve(){
     //   this.dialog = true

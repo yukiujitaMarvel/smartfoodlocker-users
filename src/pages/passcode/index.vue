@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <HeaderDetail :title="myTitle" ref="headerDetail"/>
+    <HeaderDetail :title="myTitle" :color="myColor" ref="headerDetail"/>
       <div class="passcode-wrap">
         <div class="passcode-inner-wrap">
           <div class="passcode-img">
@@ -41,6 +41,7 @@ export default {
   data () {
     return {
       myTitle: '商品受取' /*['items.item_name']*/,
+      myColor: 'background-color:red;'
     }
   },
   components: {
