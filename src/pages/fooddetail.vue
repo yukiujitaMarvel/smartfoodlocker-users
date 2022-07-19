@@ -4,13 +4,21 @@
     <HeaderDetail :title="myTitle" ref="headerDetail"/>
     <div class="food-detail-wrap">
       <div class="food-detail-inner-wrap">
+        <!-- <div class="select-day">
+          <h3>7/15</h3>
+        </div> -->
+        <div class="select-day">
+          <h3>2022/7/15,11:45~12:00</h3>
+        </div>
         <div class="food-detail-img">
-          <img :src="items.item_img" alt="">
+          <!-- <img :src="items.item_img" alt=""> -->
+          <img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" alt="">
           <div class="price-wrap">
-            <p>{{ items.item_price }}<span>taxin</span></p>
+            <!-- <p>{{ items.item_price }}<span>taxin</span></p> -->
+            <p>580<span>taxin</span></p>
           </div>
         </div>
-        <div>
+        <!-- <div>
           <v-text-field
               v-model="benched"
               type="number"
@@ -18,8 +26,11 @@
               min="1"
               max="10"
             ></v-text-field>
+        </div> -->
+        <div class="itmedetail">
+          <p>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</p>
         </div>
-        <div class="food-detail-menu" v-if="items.category_id == '01'">
+        <!-- <div class="food-detail-menu" v-if="items.category_id == '01'">
           <div class="food-detail-title title-top">
             <div class="food-title">
               <h3>ご飯</h3>
@@ -54,12 +65,52 @@
               </label>
             </fieldset>
           </div>
-        </div>
+        </div> -->
+
+        
+
         <div class="button-wrap">
-          <a href="#" v-on:click="addCarts" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />カートへ追加する</a>
+          <a href="#" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />予約する</a>
         </div>
+
+        <div class="button-wrap">
+          <a href="#" @click="orderStop" class="btn btn--red btn-d"><font-awesome-icon icon="fa-solid fa-trash-can" style="padding-right:10px;" />注文をキャンセルする</a>
+        </div>
+
+        <v-row justify="center">
+          <v-dialog
+            v-model="dialog"
+            persistent
+            max-width="290"
+          >
+            <v-card>
+              <h5>2022/7/15,11:45~12:00の注文をキャンセルしますか？</h5>
+              <v-card-actions>
+                <div class="cansel-btn-wrap">
+                  <button
+                    color="green darken-1"
+                    text
+                    class="back-btn"
+                    @click="dialog = false"
+                  >
+                    戻る
+                  </button>
+                  <button
+                    color="green darken-1"
+                    text
+                    class="cancel-btn"
+                    @click="dialog = false"
+                  >
+                    キャンセル
+                  </button>
+                </div>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
       </div>
     </div>
+
     
     <Footer />
   </div>
@@ -82,6 +133,7 @@ export default {
   },
   data () {
     return {
+        dialog: false,
         benched: 1,
         myTitle: '' /*['items.item_name']*/,
         items: {},
@@ -94,22 +146,26 @@ export default {
     HeaderDetail,
     Footer,
   },
-  async created() {
-    await this.getItems();
-  },
+  // async created() {
+  //   await this.getItems();
+  // },
   methods: {
+    async orderStop(){
+      this.dialog = true
+
+    },
     async getItems() {
-      const query = this.$route.query.id;
-      const items = await API.graphql(graphqlOperation(getItems,{id: query}));
-      console.log(items);
-      this.items = items.data.getItems;
-      console.log(this.items);
-      this.myTitle = items.data.getItems.item_name;
+      // const query = this.$route.query.id;
+      // const items = await API.graphql(graphqlOperation(getItems,{id: query}));
+      // console.log(items);
+      // this.items = items.data.getItems;
+      // console.log(this.items);
+      // this.myTitle = items.data.getItems.item_name;
       
-      if(items.data.getItems.category_id === '01'){
-        this.riceOption = '01';
-        this.soupOption = '01';
-      }
+      // if(items.data.getItems.category_id === '01'){
+      //   this.riceOption = '01';
+      //   this.soupOption = '01';
+      // }
 
       /*const itemLists = await API.graphql(graphqlOperation(listItemLists));
       this.itemLists = itemLists.data.listItemLists.items;
@@ -121,18 +177,18 @@ export default {
         }
       })*/
     },
-    async addCarts() {
-      const createCartsInput = {
-        item_id: this.items.id,
-        user_id: this.$refs.userData.users.attributes.sub,
-        rice_option: this.riceOption,
-        soup_option: this.soupOption,
-        item_num: this.benched,
-      };
+    // async addCarts() {
+    //   const createCartsInput = {
+    //     item_id: this.items.id,
+    //     user_id: this.$refs.userData.users.attributes.sub,
+    //     rice_option: this.riceOption,
+    //     soup_option: this.soupOption,
+    //     item_num: this.benched,
+    //   };
 
-      await API.graphql(graphqlOperation(createCarts,{input: createCartsInput}));
-      await this.$refs.headerDetail.countCarts();
-    },
+    //   await API.graphql(graphqlOperation(createCarts,{input: createCartsInput}));
+    //   await this.$refs.headerDetail.countCarts();
+    // },
   },
 }
 </script>
@@ -188,6 +244,9 @@ h1 {
   margin: 0;
   line-height: 1.2;
 }
+h5{
+  padding: 30px;
+}
 
 p {
   margin: 0 0 1.6rem;
@@ -195,6 +254,59 @@ p {
   border-bottom: 1px solid #ddd;
 }
 
+.select-day{
+  text-align: center;
+}
+.select-day h3 {
+  padding: 10px;
+  font-weight: bold;
+}
+.itmedetail{
+  width: 100%;
+  padding: 10px;
+  overflow-wrap: break-word;
+}
+.v-card__actions{
+  display: block;
+  text-align: center;
+}
+.cansel-btn-wrap{
+  padding: 10px;
+}
+.back-btn{
+  font-size: 12px;
+  border: 1px solid orange;
+  border-radius: 20px;
+  color: orange;
+  padding: 10px 20px 10px 20px;
+  margin-right: 30px;
+}
+.back-btn:hover{
+  font-size: 12px;
+  border: 1px solid orange;
+  border-radius: 20px;
+  background-color: orange;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px 10px 20px;
+}
+.cancel-btn{
+  font-size: 12px;
+  border: 1px solid orange;
+  border-radius: 20px;
+  background-color: orange;
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+}
+.cancel-btn:hover{
+  font-size: 12px;
+  border: 1px solid orange;
+  border-radius: 20px;
+  background-color: white;
+  color: orange;
+  padding: 10px;
+}
 .radio-inline__input {
     clip: rect(1px, 1px, 1px, 1px);
     position: absolute !important;
@@ -254,6 +366,30 @@ p {
   margin: 50px 0 50px 0;
   font-weight: bold;
   text-align: center;
+}
+
+a.btn--red {
+  color: red;
+  background-color: white;
+  text-decoration: none;
+  border: 1px red solid;
+  border-radius: 20px;
+}
+
+a.btn--red:hover {
+  color: #fff;
+  background: #EA5303;
+}
+
+a.btn-d {
+  font-size: 16px;
+  position: relative;
+  padding: 20px;
+  border-radius: 100vh;
+}
+
+a.btn-d i.fa {
+  margin-right: 1rem;
 }
 
 a.btn--orange {
