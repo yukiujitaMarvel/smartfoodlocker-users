@@ -43,7 +43,7 @@
             <div class="card-info">
               <v-radio
               label="VISA"
-              value="radio-1"
+              value="radio-2"
               ></v-radio>
               <p>**** **** ****1234</p>
 
