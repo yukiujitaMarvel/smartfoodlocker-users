@@ -74,6 +74,10 @@
         </div>
 
         <div class="button-wrap">
+          <a href="/ordercomplete" class="btn btn--green btn-e"><font-awesome-icon icon="fa-solid fa-check" style="padding-right:10px;"/>QRコード・注文番号</a>
+        </div>
+
+        <div class="button-wrap">
           <a href="#" @click="orderStop" class="btn btn--red btn-d"><font-awesome-icon icon="fa-solid fa-trash-can" style="padding-right:10px;" />注文をキャンセルする</a>
         </div>
 
@@ -334,6 +338,25 @@ p {
     outline-offset: -2px;
     outline-style: auto;
     outline-width: 5px;
+}
+a.btn--green {
+  color: white;
+  background-color: #14B855;
+  text-decoration: none;
+  border: 1px #14B855 solid;
+  border-radius: 20px;
+}
+
+a.btn--green:hover {
+  color: black;
+  background: white;
+}
+
+a.btn-e {
+  font-size: 16px;
+  position: relative;
+  padding: 20px;
+  border-radius: 100vh;
 }
 /* 値段 */
 .price-wrap {
