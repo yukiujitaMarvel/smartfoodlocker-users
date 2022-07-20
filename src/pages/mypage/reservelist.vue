@@ -12,10 +12,10 @@
               <img src="~/assets/img/reserve.png" alt="">
             </div>
             <div class="button-wrap">
-              <a href="#" class="btn btn--green btn-e"><font-awesome-icon icon="fa-solid fa-check" style="padding-right:10px;"/>QRコード・注文番号</a>
+              <a href="/ordercomplete" class="btn btn--green btn-e"><font-awesome-icon icon="fa-solid fa-check" style="padding-right:10px;"/>QRコード・注文番号</a>
             </div>
             <div class="button-wrap">
-              <a href="#" class="btn btn--red btn-d"><font-awesome-icon icon="fa-solid fa-trash-can" style="padding-right:10px;" />注文をキャンセルする</a>
+              <a href="#"  @click="orderStop" class="btn btn--red btn-d"><font-awesome-icon icon="fa-solid fa-trash-can" style="padding-right:10px;" />注文をキャンセルする</a>
             </div>
           </div>
 
@@ -27,9 +27,42 @@
               <img src="~/assets/img/reserve.png" alt="">
             </div>
             <div class="button-wrap">
-              <a href="#" class="btn btn--red btn-d"><font-awesome-icon icon="fa-solid fa-trash-can" style="padding-right:10px;" />注文をキャンセルする</a>
+              <a href="#"  @click="orderStop" class="btn btn--red btn-d"><font-awesome-icon icon="fa-solid fa-trash-can" style="padding-right:10px;" />注文をキャンセルする</a>
             </div>
           </div>
+
+          <v-row justify="center">
+            <v-dialog
+              v-model="dialog"
+              persistent
+              max-width="290"
+            >
+              <v-card>
+                <h5>2022/7/15,11:45~12:00の注文をキャンセルしますか？</h5>
+                <v-card-actions>
+                  <div class="cansel-btn-wrap">
+                    <button
+                      color="green darken-1"
+                      text
+                      class="back-btn"
+                      @click="dialog = false"
+                    >
+                      戻る
+                    </button>
+                    <button
+                      color="green darken-1"
+                      text
+                      class="cancel-btn"
+                      @click="dialog = false"
+                    >
+                      キャンセル
+                    </button>
+                  </div>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-row>
+
         </div>
       </div>
     <Footer />
@@ -50,6 +83,7 @@ export default {
   data () {
     return {
       myTitle: '予約一覧' /*['items.item_name']*/,
+      dialog: false,
     }
   },
   components: {
@@ -57,6 +91,11 @@ export default {
     HeaderPasscord,
     Footer,
   },
+  methods: {
+    async orderStop(){
+      this.dialog = true
+    },
+  }
 }
 </script>
 
@@ -83,6 +122,13 @@ export default {
 .reserve-title {
   color: black;
   font-size: 12px;
+}
+h5{
+  padding: 30px;
+}
+.v-card__actions{
+  display: block;
+  text-align: center;
 }
 
 
@@ -144,6 +190,43 @@ a.btn-d {
 
 a.btn-d i.fa {
   margin-right: 1rem;
+}
+.cansel-btn-wrap{
+  padding: 10px;
+}
+.back-btn{
+  font-size: 12px;
+  border: 1px solid orange;
+  border-radius: 20px;
+  color: orange;
+  padding: 10px 20px 10px 20px;
+  margin-right: 30px;
+}
+.back-btn:hover{
+  font-size: 12px;
+  border: 1px solid orange;
+  border-radius: 20px;
+  background-color: orange;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px 10px 20px;
+}
+.cancel-btn{
+  font-size: 12px;
+  border: 1px solid orange;
+  border-radius: 20px;
+  background-color: orange;
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+}
+.cancel-btn:hover{
+  font-size: 12px;
+  border: 1px solid orange;
+  border-radius: 20px;
+  background-color: white;
+  color: orange;
+  padding: 10px;
 }
 
 
