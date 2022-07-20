@@ -14,13 +14,21 @@
         </span>
 
         <v-spacer>
-          <v-toolbar-title>商品受取</v-toolbar-title>
+          <v-toolbar-title>{{ title }}</v-toolbar-title>
         </v-spacer>
 
       </v-toolbar>
     </div>
   </v-card>
 </template>
+
+<script>
+
+export default{
+  props: ['title']
+}
+</script>
+
 
 <style scoped>
 .theme--light.v-toolbar.v-sheet {
@@ -32,7 +40,7 @@
 }
 .spacer .v-toolbar__title{
   color: black;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: bold;
 }
 </style>
