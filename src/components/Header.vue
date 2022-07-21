@@ -93,7 +93,7 @@
               </v-list-item>
             </a>
 
-            <a href="#">
+            <a href="/setting">
               <v-list-item>
                 <v-icon class="icon">mdi-cog-outline</v-icon>
                 <div class="menu-title">
