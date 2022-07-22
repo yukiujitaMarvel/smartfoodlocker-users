@@ -20,10 +20,10 @@
             <v-tab-item>
               <v-card>
                 <v-card-text>
-                  <v-text-field label="ユーザー名" value="John Doe" readonly></v-text-field>
-                  <v-text-field label="電話番号" readonly></v-text-field>
-                  <v-text-field label="メールアドレス"></v-text-field>
-                  <v-text-field label="パスワード"></v-text-field>
+                  <v-text-field label="ユーザー名" value="John Doe" v-model="users.username" readonly></v-text-field>
+                  <v-text-field label="電話番号" v-model="users.attributes.phone_number" readonly></v-text-field>
+                  <v-text-field label="メールアドレス" v-model="users.attributes.email" readonly></v-text-field>
+                  <v-text-field label="パスワード" value="*******" readonly></v-text-field>
                   <div class="button-wrap">
                     <a href="#" class="btn btn--logout btn-a">ログアウト</a>
                   </div>
@@ -71,6 +71,7 @@
 import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
+import Auth from "@aws-amplify/auth";
 
 
 
@@ -85,7 +86,15 @@ export default {
     myTitle: '設定',
       tab: null,
       column: null,
-      
+      users: {
+        username: '',
+        attributes: [
+          {
+            phone_number: '',
+            email: '',
+          }
+        ]
+      }
     }
   },
   components: {
@@ -93,7 +102,10 @@ export default {
     HeaderDetail,
     Footer,
   },
-  
+  async created() {
+    const userData = await Auth.currentAuthenticatedUser();
+    this.users = userData
+  },
   methods: {
     
     
