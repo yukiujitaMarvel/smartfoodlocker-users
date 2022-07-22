@@ -2,25 +2,29 @@
   <div>
     <div class="menu-wrap">
 
-      <a href="/fooddetail">
-        <div class="menu-list-wrap">
-          <div class="past-wrap"></div>
+      <a v-for="date in dates"
+        :key="date.ymd" 
+        :href="date.items.length ? '/fooddetail':null" 
+        :tabindex="date.items.length ? null:-1"
+      >
+        <div class="menu-list-wrap" :class="{'today':isEqualDates(date,today)}">
+          <div v-if="compareDates(date,today)" class="past-wrap"></div>
           <div class="day">
-            <p>(金)</p>
+            <p :data-text="date.month + '/' + date.day + '\n'">({{date.weekDay}})</p>
           </div>
           <div class="menu-content">
             <div class="menu-img"> 
-              <img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" alt="">
+              <img v-if="date.items.length" :src="date.items[0].item_img" alt="">
             </div>
             <div class="menu-detail">
-              <h1>エビチリ弁当</h1>
-              <p>¥500<span>tax in</span></p>
+              <h1 v-if="date.items.length">{{date.items[0].item_name}}</h1>
+              <p v-if="date.items.length">¥{{date.items[0].item_price}}<span>tax in</span></p>
             </div>
           </div>
         </div>
       </a>
 
-      <a href="/fooddetail">
+      <!--<a href="/fooddetail">
         <div class="menu-list-wrap today">
           <div class="day">
             <p>(金)</p>
@@ -112,7 +116,7 @@
             <p>¥500<span>tax in</span></p>
           </div>
         </div>
-      </div>
+      </div>-->
 
     </div>
   </div>
@@ -120,7 +124,7 @@
 
 <script>
 import { API, graphqlOperation} from 'aws-amplify'
-import { getItems } from '../graphql/queries'
+import { listItems } from '../graphql/queries'
 import { createCarts } from '../graphql/mutations'
 import { tsImportEqualsDeclaration } from '@babel/types'
 
@@ -133,13 +137,96 @@ export default {
   data () {
     return {
       myTitle: 'MENU',
+      maxDays: 14,
+      dates: [],
+      items: [],
+      today: "",
     }
   },
-  
-  
+  async created() {
+    const now = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
+    this.today = {
+      year: now.getFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate(),
+    };
+    await this.getDates();
+  },
+  mounted() {
+    let target = document.getElementsByClassName('today');
+    target[0].scrollIntoView(true);
+  },
   methods: {
-    
+    async getDates() {
+      const dayBefore =  Math.ceil(this.maxDays / 2) - 1;
+      const wd = ['日','月','火','水','木','金','土'];
+
+      for (let i = 0; i < this.maxDays; i++) {
+        const startDate = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
+        startDate.setDate(startDate.getDate() - (dayBefore - i));
+        
+        const y = startDate.getFullYear();
+        const m = startDate.getMonth() + 1;
+        const d = startDate.getDate();
+
+        this.dates.push({
+          timeStamp: startDate,
+          year: y,
+          month: m,
+          day: d,
+          ymd: y + '-' + m.toString().padStart(2, '0') + '-' + d.toString().padStart(2, '0'),
+          weekDay: wd[startDate.getDay()],
+          items: '',
+        });
+      }
+
+      await this.listItems();
+
+      if(this.items?.length) {
+        this.dates.forEach((date,index) => {
+          this.dates[index].items = this.items.filter(item => item.release_day === date.ymd);
+        });
+      }
+
+      console.log(this.dates);
     },
+    async listItems() {
+      console.log(this.dates[0].ymd);
+      console.log(this.dates[this.maxDays-1].ymd);
+
+      const items = await API.graphql(
+        graphqlOperation(listItems, {
+          filter: {release_day: {ge: this.dates[0].ymd, le: this.dates[this.maxDays-1].ymd}}
+        })
+      );
+      console.log(items);
+      this.items = items.data.listItems.items;
+    },
+    isEqualDates(date1,date2) {
+      if (date1.year === date2.year) {
+        if (date1.month === date2.month) {
+          return (date1.day === date2.day);
+        }
+        else {
+          return false;
+        }
+      } else {
+        return false;
+      } 
+    },
+    compareDates(date1,date2) {
+      if (date1.year === date2.year) {
+        if (date1.month === date2.month) {
+          return (date1.day < date2.day);
+        }
+        else {
+          return (date1.month < date2.month);
+        }
+      } else {
+        return (date1.year < date2.year);
+      } 
+    },
+  },
 }
 </script>
 
@@ -181,7 +268,7 @@ export default {
   text-align: center;
 }
 .day p::before {
-  content: '7/15\A';
+  content: attr(data-text)"";
   white-space: pre ;
 }
 .menu-content{
@@ -203,6 +290,7 @@ export default {
 }
 .menu-detail{
   text-align: center;
+  height: 48px;
 }
 .menu-detail p{
   margin: 0;
