@@ -4,7 +4,7 @@
 
       <a v-for="date in dates"
         :key="date.ymd" 
-        :href="date.items.length ? '/fooddetail':null" 
+        :href="date.items.length ? 'fooddetail?id=' + date.items[0].id :null" 
         :tabindex="date.items.length ? null:-1"
       >
         <div class="menu-list-wrap" :class="{'today':isEqualDates(date,today)}">
