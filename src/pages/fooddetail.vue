@@ -5,17 +5,15 @@
     <div class="food-detail-wrap">
       <div class="food-detail-inner-wrap">
         <div class="select-day">
-          <h3>7/15</h3>
+          <h3>{{month + '/' + day}}</h3>
         </div>
         <div class="select-day">
-          <h3>2022/7/15,11:45~12:00</h3>
+          <h3>{{year + '/' + month + '/' + day }},11:45~12:00</h3>
         </div>
         <div class="food-detail-img">
-          <!-- <img :src="items.item_img" alt=""> -->
-          <img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" alt="">
+          <img :src="items.item_img" alt="">
           <div class="price-wrap">
-            <!-- <p>{{ items.item_price }}<span>taxin</span></p> -->
-            <p>580<span>taxin</span></p>
+            <p>{{items.item_price}}<span>taxin</span></p>
           </div>
         </div>
         <!-- <div>
@@ -28,7 +26,7 @@
             ></v-text-field>
         </div> -->
         <div class="itmedetail">
-          <p>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</p>
+          <p>{{items.item_detail}}</p>
         </div>
         <!-- <div class="food-detail-menu" v-if="items.category_id == '01'">
           <div class="food-detail-title title-top">
@@ -69,16 +67,16 @@
 
         
 
-        <div class="button-wrap">
-          <a href="order" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />予約する</a>
+        <div v-if="!Object.keys(orders).length" class="button-wrap">
+          <a :href="'order?id=' + items.id" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />予約する</a>
         </div>
 
-        <div class="button-wrap">
+        <div v-if="Object.keys(orders).length" class="button-wrap">
           <a href="/ordercomplete" class="btn btn--green btn-e"><font-awesome-icon icon="fa-solid fa-check" style="padding-right:10px;"/>QRコード・注文番号</a>
         </div>
 
-        <div class="button-wrap">
-          <a href="#" @click="orderStop" class="btn btn--red btn-d"><font-awesome-icon icon="fa-solid fa-trash-can" style="padding-right:10px;" />注文をキャンセルする</a>
+        <div v-if="(Object.keys(orders).length) && (orders.status === '01')" class="button-wrap">
+          <a @click="orderStop" class="btn btn--red btn-d"><font-awesome-icon icon="fa-solid fa-trash-can" style="padding-right:10px;" />注文をキャンセルする</a>
         </div>
 
         <v-row justify="center">
@@ -88,7 +86,7 @@
             max-width="290"
           >
             <v-card>
-              <h5>2022/7/15,11:45~12:00の注文をキャンセルしますか？</h5>
+              <h5>{{year + '/' + month + '/' + day + ',' + orders.pickup_time + 'の注文をキャンセルしますか？'}}</h5>
               <v-card-actions>
                 <div class="cansel-btn-wrap">
                   <button
@@ -103,7 +101,7 @@
                     color="green darken-1"
                     text
                     class="cancel-btn"
-                    @click="dialog = false"
+                    @click="cancelOrders()"
                   >
                     キャンセル
                   </button>
@@ -124,9 +122,9 @@
 import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
-import { API, graphqlOperation} from 'aws-amplify'
-import { getItems } from '../graphql/queries'
-import { createCarts } from '../graphql/mutations'
+import { API, graphqlOperation, Auth} from 'aws-amplify'
+import { getItems, listOrders} from '../graphql/queries'
+import { updateOrders } from '../graphql/mutations'
 import { tsImportEqualsDeclaration } from '@babel/types'
 
 export default {
@@ -141,8 +139,10 @@ export default {
         benched: 1,
         myTitle: '' /*['items.item_name']*/,
         items: {},
-        riceOption: "",
-        soupOption: "",
+        orders: {},
+        year:'',
+        month:'',
+        day:'',
     }
   },
   components: {
@@ -150,36 +150,66 @@ export default {
     HeaderDetail,
     Footer,
   },
-  // async created() {
-  //   await this.getItems();
-  // },
+  async created() {
+    await Promise.all([this.getItems(), this.listOrders()]);
+    /*await this.getItems();
+    await this.listOrders();*/
+  },
   methods: {
     async orderStop(){
       this.dialog = true
 
     },
     async getItems() {
-      // const query = this.$route.query.id;
-      // const items = await API.graphql(graphqlOperation(getItems,{id: query}));
-      // console.log(items);
-      // this.items = items.data.getItems;
-      // console.log(this.items);
-      // this.myTitle = items.data.getItems.item_name;
-      
-      // if(items.data.getItems.category_id === '01'){
-      //   this.riceOption = '01';
-      //   this.soupOption = '01';
-      // }
+      const items = await API.graphql(graphqlOperation(getItems,{id: this.$route.query.id}));
+      this.items = items.data.getItems;
+      this.myTitle = this.items.item_name;
 
-      /*const itemLists = await API.graphql(graphqlOperation(listItemLists));
-      this.itemLists = itemLists.data.listItemLists.items;
+      const ymd = this.items.release_day.split('-');
+      this.year = ymd[0];
+      this.month = ymd[1];
+      this.day = ymd[2];
+    },
+    async listOrders() {
+      const userData = await Auth.currentAuthenticatedUser();
+      const user_id = userData.attributes.sub;
 
-      this.itemLists.forEach((value) => {
-        if(value.id == query) {
-          this.items = value;
-          this.myTitle = value.item_name;
-        }
-      })*/
+      const orders = await API.graphql(
+        graphqlOperation(listOrders, {
+          filter: {
+            and:[
+              {item_id: {eq: this.$route.query.id}},
+              {user_id: {eq: user_id}}, 
+              {or: [
+                {status: {eq: "01"}}, 
+                {status: {eq: "02"}}, 
+                {status: {eq: "03"}}, 
+                {status: {eq: "04"}},
+              ]}, 
+            ],
+          }
+        })
+      );
+      if(orders.data.listOrders.items.length) {
+        this.orders = orders.data.listOrders.items[0];
+      }
+    },
+    async cancelOrders() {
+      this.dialog = false
+
+      const updateOrdersInput = {
+        id: this.orders.id,
+        user_id: this.orders.user_id,
+        item_id: this.orders.item_id,
+        total_price: this.orders.total_price,
+        pickup_place: this.orders.pickup_place,
+        pickup_time: this.orders.pickup_time,
+        status: '05',
+        lock_flg: this.orders.lock_flg,
+      };
+
+      await API.graphql(graphqlOperation(updateOrders,{input: updateOrdersInput}));
+
     },
     // async addCarts() {
     //   const createCartsInput = {

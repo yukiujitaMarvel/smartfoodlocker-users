@@ -4,9 +4,9 @@
     <HeaderPasscord :title="myTitle" ref="headerDetail"/>
       <div class="reserve-wrap">
         <div class="reserve-inner-wrap">
-          <div class="reserve-content">
+          <div v-for="order in orders" :key="order.id" class="reserve-content">
             <div class="reserve-title">
-              <p>予約日時 2022/07/15,11:45~12:00</p>
+              <p>{{'予約日時' + order.items.release_day.split('-').join('/') + ',' + order.pickup_time}}</p>
             </div>
             <div class="reserve-img"> 
               <img src="~/assets/img/reserve.png" alt="">
@@ -14,12 +14,12 @@
             <div class="button-wrap">
               <a href="/ordercomplete" class="btn btn--green btn-e"><font-awesome-icon icon="fa-solid fa-check" style="padding-right:10px;"/>QRコード・注文番号</a>
             </div>
-            <div class="button-wrap">
-              <a href="#"  @click="orderStop" class="btn btn--red btn-d"><font-awesome-icon icon="fa-solid fa-trash-can" style="padding-right:10px;" />注文をキャンセルする</a>
+            <div v-if="order.status === '01'" class="button-wrap">
+              <a @click="orderStop(order)" class="btn btn--red btn-d"><font-awesome-icon icon="fa-solid fa-trash-can" style="padding-right:10px;" />注文をキャンセルする</a>
             </div>
           </div>
 
-          <div class="reserve-content">
+          <!--<div class="reserve-content">
             <div class="reserve-title">
               <p>予約日時 2022/07/15,11:45~12:00</p>
             </div>
@@ -29,7 +29,7 @@
             <div class="button-wrap">
               <a href="#"  @click="orderStop" class="btn btn--red btn-d"><font-awesome-icon icon="fa-solid fa-trash-can" style="padding-right:10px;" />注文をキャンセルする</a>
             </div>
-          </div>
+          </div>-->
 
           <v-row justify="center">
             <v-dialog
@@ -38,7 +38,7 @@
               max-width="290"
             >
               <v-card>
-                <h5>2022/7/15,11:45~12:00の注文をキャンセルしますか？</h5>
+                <h5 v-if="Object.keys(selectedOrders).length">{{selectedOrders.items.release_day.split('-').join('/') + ',' + selectedOrders.pickup_time + 'の注文をキャンセルしますか？'}}</h5>
                 <v-card-actions>
                   <div class="cansel-btn-wrap">
                     <button
@@ -53,7 +53,7 @@
                       color="green darken-1"
                       text
                       class="cancel-btn"
-                      @click="dialog = false"
+                      @click="cancelOrders"
                     >
                       キャンセル
                     </button>
@@ -73,6 +73,9 @@
 import Header from '~/components/Header'
 import HeaderPasscord from '~/components/HeaderPasscord'
 import Footer from '~/components/Footer'
+import { API, graphqlOperation, Auth} from 'aws-amplify'
+import { listOrders } from '~/graphql/queries'
+import { updateOrders } from '~/graphql/mutations'
 
 export default {
   head() {
@@ -84,6 +87,12 @@ export default {
     return {
       myTitle: '予約一覧' /*['items.item_name']*/,
       dialog: false,
+      orders: [],
+      selectedOrders: {},
+      usre_id:'',
+      year:'',
+      month:'',
+      day:'',
     }
   },
   components: {
@@ -91,9 +100,61 @@ export default {
     HeaderPasscord,
     Footer,
   },
+  async created() {
+    const userData = await Auth.currentAuthenticatedUser();
+    this.user_id = userData.attributes.sub;
+    await this.listOrders();
+  },
   methods: {
-    async orderStop(){
+    orderStop(order){
+      this.selectedOrders = order;
       this.dialog = true
+    },
+    async listOrders() {
+      const orders = await API.graphql(
+        graphqlOperation(listOrders, {
+          filter: {
+            and:[
+              {user_id: {eq: this.user_id}}, 
+              {or: [
+                {status: {eq: "01"}}, 
+                {status: {eq: "02"}}, 
+                {status: {eq: "03"}}, 
+                {status: {eq: "04"}},
+              ]}, 
+            ],
+          }
+        })
+      );
+      this.orders = orders.data.listOrders.items;
+
+      this.orders.sort(function(a, b) {
+        if (a.items.release_day > b.items.release_day) {
+          return 1;
+        } else {
+          return -1;
+        }
+      })
+
+    },
+    async updateOrders() {
+      const updateOrdersInput = {
+        id: this.selectedOrders.id,
+        user_id: this.selectedOrders.user_id,
+        item_id: this.selectedOrders.item_id,
+        total_price: this.selectedOrders.total_price,
+        pickup_place: this.selectedOrders.pickup_place,
+        pickup_time: this.selectedOrders.pickup_time,
+        status: '05',
+        lock_flg: this.selectedOrders.lock_flg,
+      };
+
+      await API.graphql(graphqlOperation(updateOrders,{input: updateOrdersInput}));
+    },
+    async cancelOrders() {
+      this.dialog = false;
+      await this.updateOrders();
+      await this.listOrders();
     },
   }
 }

@@ -4,21 +4,24 @@
 
       <a v-for="date in dates"
         :key="date.ymd" 
-        :href="date.items.length ? 'fooddetail?id=' + date.items[0].id :null" 
-        :tabindex="date.items.length ? null:-1"
+        :href="Object.keys(date.items).length ? 'fooddetail?id=' + date.items.id :null" 
+        :tabindex="Object.keys(date.items).length ? null:-1"
       >
         <div class="menu-list-wrap" :class="{'today':isEqualDates(date,today)}">
+          <div v-if="Object.keys(date.orders).length" class="reserved">
+            <p>予約済み</p>
+          </div>
           <div v-if="compareDates(date,today)" class="past-wrap"></div>
           <div class="day">
             <p :data-text="date.month + '/' + date.day + '\n'">({{date.weekDay}})</p>
           </div>
           <div class="menu-content">
             <div class="menu-img"> 
-              <img v-if="date.items.length" :src="date.items[0].item_img" alt="">
+              <img v-if="Object.keys(date.items).length" :src="date.items.item_img" alt="">
             </div>
             <div class="menu-detail">
-              <h1 v-if="date.items.length">{{date.items[0].item_name}}</h1>
-              <p v-if="date.items.length">¥{{date.items[0].item_price}}<span>tax in</span></p>
+              <h1 v-if="Object.keys(date.items).length">{{date.items.item_name}}</h1>
+              <p v-if="Object.keys(date.items).length">¥{{date.items.item_price}}<span>tax in</span></p>
             </div>
           </div>
         </div>
@@ -123,8 +126,8 @@
 </template>
 
 <script>
-import { API, graphqlOperation} from 'aws-amplify'
-import { listItems } from '../graphql/queries'
+import { API, graphqlOperation, Auth} from 'aws-amplify'
+import { listItems, listOrders } from '../graphql/queries'
 import { createCarts } from '../graphql/mutations'
 import { tsImportEqualsDeclaration } from '@babel/types'
 
@@ -140,6 +143,7 @@ export default {
       maxDays: 14,
       dates: [],
       items: [],
+      orders: [],
       today: "",
     }
   },
@@ -177,14 +181,25 @@ export default {
           ymd: y + '-' + m.toString().padStart(2, '0') + '-' + d.toString().padStart(2, '0'),
           weekDay: wd[startDate.getDay()],
           items: '',
+          orders:'',
         });
       }
 
       await this.listItems();
+      await this.listOrders();
 
-      if(this.items?.length) {
+      if(this.items.length) {
         this.dates.forEach((date,index) => {
-          this.dates[index].items = this.items.filter(item => item.release_day === date.ymd);
+          this.items.forEach((item) => {
+            if(item.release_day === date.ymd) {
+              this.dates[index].items = item;
+              this.orders.forEach((order) => {
+                if(order.item_id === item.id) {
+                  this.dates[index].orders = order;
+                }
+              });
+            }
+          });
         });
       }
 
@@ -194,13 +209,49 @@ export default {
       console.log(this.dates[0].ymd);
       console.log(this.dates[this.maxDays-1].ymd);
 
-      const items = await API.graphql(
+      let items = '';
+
+      items = await API.graphql(
         graphqlOperation(listItems, {
           filter: {release_day: {ge: this.dates[0].ymd, le: this.dates[this.maxDays-1].ymd}}
         })
       );
-      console.log(items);
+
       this.items = items.data.listItems.items;
+
+      console.log(this.items);
+    },
+    async listOrders() {
+      const userData = await Auth.currentAuthenticatedUser();
+      const user_id = userData.attributes.sub;
+
+      const itemIDArray = [];
+      this.items.forEach((item) => {
+        itemIDArray.push({item_id: {eq: item.id}});
+      });
+
+      if(itemIDArray.length) {
+        const orders = await API.graphql(
+          graphqlOperation(listOrders, {
+            filter: {
+              and:[
+                {user_id: {eq: user_id}}, 
+                {or: [
+                  {status: {eq: "01"}}, 
+                  {status: {eq: "02"}}, 
+                  {status: {eq: "03"}}, 
+                  {status: {eq: "04"}},
+                ]}, 
+                {or: itemIDArray},
+              ],
+            }
+          })
+        );
+        this.orders = orders.data.listOrders.items;
+      }
+
+      console.log(this.orders);
+
     },
     isEqualDates(date1,date2) {
       if (date1.year === date2.year) {
