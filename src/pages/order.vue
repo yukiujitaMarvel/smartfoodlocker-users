@@ -16,14 +16,14 @@
                 <span>数量:{{cart.item_num}}</span>
               </div>
             </li>              -->
-            <li>エビチリ弁当</li>
+            <li>{{items.item_name}}</li>
             <!--<li>デリサラダ</li>-->
           </ol>
           <!-- <div class="total-price">
             <p>¥{{totalPrice.toLocaleString()}}</p>
           </div> -->
           <div class="total-price">
-            <p>¥580</p>
+            <p>¥{{items.item_price}}</p>
           </div>
         </div>
         <div class="pay-info">
@@ -68,8 +68,9 @@
               sm="6"
             >
               <v-select
-                :items="items"
-                label="7/15(金) 11:45~12:00"
+                v-model="pickup_time"
+                :items="time"
+                :label="month + '/' + day + '(' +  weekDay  + ')'"
               ></v-select>
             </v-col>
           </v-row>
@@ -206,7 +207,7 @@
 
         <div class="button-wrap">
           <!-- <a href="#" v-on:click="addOrders" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-check" style="margin-right:20px;" />確定する</a> -->
-          <a href="#" v-on:click="Orders" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-check" style="margin-right:20px;" />確定する</a>
+          <a v-on:click="Orders" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-check" style="margin-right:20px;" />確定する</a>
         </div>
       </div>
     <Footer />
@@ -218,7 +219,7 @@ import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation } from 'aws-amplify'
-import { listCarts } from '../graphql/queries'
+import { getItems } from '../graphql/queries'
 import { createOrders, createOrderDetail, deleteCarts } from '../graphql/mutations'
 import Auth from "@aws-amplify/auth";
 
@@ -229,17 +230,19 @@ export default {
     }
   },
   data () {
-  return {
-     dialog: false,
-     myTitle: '注文内容',
-     carts: [],
-     user_id: '',
-     totalPrice: 0,
+    return {
+      dialog: false,
+      myTitle: '注文内容',
+      items: {},
 
-     pay_info: '',
-     pickup_time: '',
-     pickup_place: '',
-     items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+      year:'',
+      month:'',
+      day:'',
+      weekDay:'',
+      pay_info: 'radio-1',
+      pickup_time: '11:45~12:00',
+      pickup_place: 'radio-1',
+      time: ['11:45~12:00', '12:00~12:15', '12:15~12:30', '12:30~12:45'],     
     }
   },
   components: {
@@ -247,25 +250,59 @@ export default {
     HeaderDetail,
     Footer,
   },
-  // async created() {
+  async created() {
   //   const userData = await Auth.currentAuthenticatedUser();
   //   this.user_id = userData.attributes.sub;
-  //   await this.listCarts();
-  //   this.totalPrice = this.getTotalPrice(this.carts);
-  // },
+  await this.getItems();
+  },
   methods: {
     async Orders(){
       this.dialog = true
     },
-
     async order() {
       this.dialog = false
-
-      setTimeout(() => {
-        let url = '/ordercomplete'
-        window.location.href = url
+      
+      setTimeout(async () => {
+        await this.createOrders();
+        let url = '/ordercomplete';
+        window.location.href = url;
       }, 1000)
-    }
+    },
+    async getItems() {
+      const query = this.$route.query.id;
+      const items = await API.graphql(graphqlOperation(getItems,{id: query}));
+      this.items = items.data.getItems;
+
+      const ymd = this.items.release_day.split('-');
+      this.year = ymd[0];
+      this.month = ymd[1];
+      this.day = ymd[2];
+
+      const ts = Date.parse(this.items.release_day + 'T00:00:00.000+09:00');
+      console.log(ts);
+      const dt = new Date(ts);
+
+      this.weekDay = ['日','月','火','水','木','金','土'][dt.getDay()];
+
+    },
+    async createOrders() {
+      const userData = await Auth.currentAuthenticatedUser();
+      const user_id = userData.attributes.sub;
+      const createOrdersInput = {
+        user_id: user_id,
+        item_id: this.items.id,
+        total_price: this.items.item_price,
+        pickup_place: this.pickup_place,
+        pickup_time: this.pickup_time,
+        status: '01',
+        lock_flg: false,
+      };
+
+      console.log(createOrdersInput);
+
+      await API.graphql(graphqlOperation(createOrders,{input: createOrdersInput}));
+
+    },
     // reserve(){
     //   this.dialog = true
     // },
