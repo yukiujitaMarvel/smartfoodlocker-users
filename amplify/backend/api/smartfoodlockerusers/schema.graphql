@@ -72,9 +72,27 @@ type Tickets @model {
 
 type Schedules @model {
     id: ID! @primaryKey
-    merchant_id: ID!
+    merchant_id: ID
     holiday_flg: Boolean
     date: String
     start_time: String
     finish_time: String
 } 
+
+type Weeks @model {
+    id: ID! @primaryKey
+    merchant_id: ID
+    holiday_flg: Boolean    
+    day_of_week: Int
+    start_time: String
+    finish_time: String
+}
+
+type Holiday @model {
+    id: ID! @primaryKey
+    merchant_id: ID
+    holiday_flg: Boolean
+    date: String
+    start_time: String
+    finish_time: String
+}

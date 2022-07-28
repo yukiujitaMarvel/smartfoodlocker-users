@@ -484,3 +484,87 @@ export const onDeleteSchedules = /* GraphQL */ `
     }
   }
 `;
+export const onCreateWeeks = /* GraphQL */ `
+  subscription OnCreateWeeks {
+    onCreateWeeks {
+      id
+      merchant_id
+      holiday_flg
+      day_of_week
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateWeeks = /* GraphQL */ `
+  subscription OnUpdateWeeks {
+    onUpdateWeeks {
+      id
+      merchant_id
+      holiday_flg
+      day_of_week
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteWeeks = /* GraphQL */ `
+  subscription OnDeleteWeeks {
+    onDeleteWeeks {
+      id
+      merchant_id
+      holiday_flg
+      day_of_week
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateHoliday = /* GraphQL */ `
+  subscription OnCreateHoliday {
+    onCreateHoliday {
+      id
+      merchant_id
+      holiday_flg
+      date
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateHoliday = /* GraphQL */ `
+  subscription OnUpdateHoliday {
+    onUpdateHoliday {
+      id
+      merchant_id
+      holiday_flg
+      date
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteHoliday = /* GraphQL */ `
+  subscription OnDeleteHoliday {
+    onDeleteHoliday {
+      id
+      merchant_id
+      holiday_flg
+      date
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;

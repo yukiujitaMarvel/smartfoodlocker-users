@@ -556,3 +556,105 @@ export const deleteSchedules = /* GraphQL */ `
     }
   }
 `;
+export const createWeeks = /* GraphQL */ `
+  mutation CreateWeeks(
+    $input: CreateWeeksInput!
+    $condition: ModelWeeksConditionInput
+  ) {
+    createWeeks(input: $input, condition: $condition) {
+      id
+      merchant_id
+      holiday_flg
+      day_of_week
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateWeeks = /* GraphQL */ `
+  mutation UpdateWeeks(
+    $input: UpdateWeeksInput!
+    $condition: ModelWeeksConditionInput
+  ) {
+    updateWeeks(input: $input, condition: $condition) {
+      id
+      merchant_id
+      holiday_flg
+      day_of_week
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteWeeks = /* GraphQL */ `
+  mutation DeleteWeeks(
+    $input: DeleteWeeksInput!
+    $condition: ModelWeeksConditionInput
+  ) {
+    deleteWeeks(input: $input, condition: $condition) {
+      id
+      merchant_id
+      holiday_flg
+      day_of_week
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createHoliday = /* GraphQL */ `
+  mutation CreateHoliday(
+    $input: CreateHolidayInput!
+    $condition: ModelHolidayConditionInput
+  ) {
+    createHoliday(input: $input, condition: $condition) {
+      id
+      merchant_id
+      holiday_flg
+      date
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateHoliday = /* GraphQL */ `
+  mutation UpdateHoliday(
+    $input: UpdateHolidayInput!
+    $condition: ModelHolidayConditionInput
+  ) {
+    updateHoliday(input: $input, condition: $condition) {
+      id
+      merchant_id
+      holiday_flg
+      date
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteHoliday = /* GraphQL */ `
+  mutation DeleteHoliday(
+    $input: DeleteHolidayInput!
+    $condition: ModelHolidayConditionInput
+  ) {
+    deleteHoliday(input: $input, condition: $condition) {
+      id
+      merchant_id
+      holiday_flg
+      date
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;

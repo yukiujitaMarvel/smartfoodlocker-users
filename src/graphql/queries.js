@@ -445,3 +445,89 @@ export const listSchedules = /* GraphQL */ `
     }
   }
 `;
+export const getWeeks = /* GraphQL */ `
+  query GetWeeks($id: ID!) {
+    getWeeks(id: $id) {
+      id
+      merchant_id
+      holiday_flg
+      day_of_week
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listWeeks = /* GraphQL */ `
+  query ListWeeks(
+    $id: ID
+    $filter: ModelWeeksFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listWeeks(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        merchant_id
+        holiday_flg
+        day_of_week
+        start_time
+        finish_time
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getHoliday = /* GraphQL */ `
+  query GetHoliday($id: ID!) {
+    getHoliday(id: $id) {
+      id
+      merchant_id
+      holiday_flg
+      date
+      start_time
+      finish_time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listHolidays = /* GraphQL */ `
+  query ListHolidays(
+    $id: ID
+    $filter: ModelHolidayFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listHolidays(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        merchant_id
+        holiday_flg
+        date
+        start_time
+        finish_time
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
