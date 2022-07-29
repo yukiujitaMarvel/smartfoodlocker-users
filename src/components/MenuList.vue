@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="z-index: 50;">
       <v-tabs
       background-color="white"
       color="orange darken-1"

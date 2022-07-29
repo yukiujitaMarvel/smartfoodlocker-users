@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="z-index: 50;">
     <Header ref="userData" />
     <HeaderDetail :title="myTitle" ref="headerDetail"/>
     <div class="food-detail-wrap">
@@ -231,6 +231,8 @@ export default {
 .food-detail-wrap{
   width: 100%;
   background-color: white;
+  position: sticky;
+  bottom: 0;
 }
 .food-detail-inner-wrap{
   width: 60%;

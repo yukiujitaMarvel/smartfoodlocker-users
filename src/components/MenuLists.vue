@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="z-index: 50;">
     <div class="menu-wrap">
 
       <a v-for="date in dates"
