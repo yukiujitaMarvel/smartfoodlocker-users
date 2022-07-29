@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="z-index: 50;">
     <Header />
     <HeaderDetail :title="myTitle" />
       <div class="order-wrap">

@@ -4,7 +4,7 @@
       flat
       tile
       >
-      <v-toolbar dense>
+      <v-toolbar dense class="header">
         <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
 
         <v-toolbar-title><a href="/">SmartFoodLocker</a></v-toolbar-title>
@@ -18,7 +18,7 @@
         v-model="drawer"
         fixed
         temporary
-        class="drawer"
+        class="drawer primary"
       >
         <v-list
           nav
@@ -65,7 +65,7 @@
                       <h3><font-awesome-icon icon="fa-solid fa-ticket" />回数チケット<span class="icon"></span></h3>
                     </v-expansion-panel-header>
                   </a>
-                   
+                  
                 </v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels> -->
@@ -105,7 +105,7 @@
               <h3><font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" />ログアウト</h3>
             </v-list-item> -->
             <v-list-item v-if="Object.keys(users).length">
-               <amplify-sign-out></amplify-sign-out>
+              <amplify-sign-out></amplify-sign-out>
             </v-list-item>
           </v-list-item-group>
         </v-list>
@@ -152,6 +152,12 @@ export default {
 h3{
   font-size: 12px;
 }
+.header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 100;
+}
 .menu-title{
   margin-left: 15px;
 }
@@ -160,6 +166,7 @@ h3{
 }
 .drawer{
   background-color: #EA5303;
+  z-index: 150;
 }
 .drawer-title{
   border-bottom: 1px solid white;

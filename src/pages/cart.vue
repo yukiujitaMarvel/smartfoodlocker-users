@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="z-index: 50;">
     <Header ref="userData"/>
     <HeaderDetail :title="myTitle" ref="headerDetail"/>
       <div class="cart-wrap">
