@@ -133,12 +133,13 @@ p{
   color: white;
   background-color: #EA5303;
   align-items: center;
-  justify-content: space-between;
+  justify-content: start;
 }
 .ticket-left{
+  box-sizing: content-box;
   text-align: center;
-  border-right: 1px solid white;
-  width: calc(100%/2);
+  border-right: 6px dotted #fff;
+  width: 40%;
 }
 .ticket-left-content{
   padding: 10px;
