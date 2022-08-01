@@ -134,6 +134,7 @@ p{
   background-color: #EA5303;
   align-items: center;
   justify-content: start;
+  margin-bottom: 30px;
 }
 .ticket-left{
   box-sizing: content-box;

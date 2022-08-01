@@ -1,12 +1,17 @@
 <template>
   <div>
-    <ProductsList />
+    <Header />
+    <MenuList />
+    <Footer />
   </div>
 </template>
 
 
 <script>
-import ProductsList from '~/components/ProductsList'
+import Header from '~/components/Header'
+import HeaderDetail from '~/components/HeaderDetail'
+import Footer from '~/components/Footer'
+import MenuList from '~/components/MenuList.vue'
 import { Hub } from 'aws-amplify'
 
 export default {
@@ -18,8 +23,10 @@ export default {
     }
   },
   components: {
-    ProductsList,
-  },
+    Header,
+    MenuList,
+    Footer
+},
    created() {
     Hub.listen('auth', this.listener)
   },

@@ -7,7 +7,7 @@
       <v-toolbar dense class="header">
         <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
 
-        <v-toolbar-title><a href="/">SmartFoodLocker</a></v-toolbar-title>
+        <v-toolbar-title><a href="/MenuList">SmartFoodLocker</a></v-toolbar-title>
 
         <v-spacer></v-spacer>
 
@@ -69,7 +69,34 @@
                 </v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels> -->
-            
+
+            <a href="/DailyMenuList">
+              <v-list-item>
+                <v-badge
+                  dot
+                >
+                  <v-icon class="icon">mdi-view-list-outline</v-icon>
+                </v-badge>
+                <div class="menu-title">
+                  <h3>献立表</h3>
+                </div>
+              </v-list-item>
+            </a>
+
+            <a href="/cart">
+              <v-list-item>
+                <v-badge
+                  color="green"
+                  dot
+                >
+                  <v-icon class="icon">mdi-cart</v-icon>
+                </v-badge>
+                <div class="menu-title">
+                  <h3>カート</h3>
+                </div>
+              </v-list-item>
+            </a>
+
             <a href="/mypage/reservelist">
               <v-list-item>
                 <v-badge
@@ -79,7 +106,7 @@
                   <v-icon class="icon">mdi-history</v-icon>
                 </v-badge>
                 <div class="menu-title">
-                  <h3>注文予約履歴</h3>
+                  <h3>予約注文</h3>
                 </div>
               </v-list-item>
             </a>
