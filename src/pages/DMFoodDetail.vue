@@ -68,7 +68,7 @@
         
 
         <div v-if="!Object.keys(orders).length" class="button-wrap">
-          <a :href="'order?id=' + items.id" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />予約する</a>
+          <a :href="'DMOrder?id=' + items.id" class="btn btn--orange btn-c"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="padding-right:10px;" />予約する</a>
         </div>
 
         <div v-if="Object.keys(orders).length" class="button-wrap">

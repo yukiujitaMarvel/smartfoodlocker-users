@@ -7,7 +7,7 @@
       <v-toolbar dense class="header">
         <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
 
-        <v-toolbar-title><a href="/MenuList">SmartFoodLocker</a></v-toolbar-title>
+        <v-toolbar-title><a href="/">SmartFoodLocker</a></v-toolbar-title>
 
         <v-spacer></v-spacer>
 
@@ -97,7 +97,7 @@
               </v-list-item>
             </a>
 
-            <a href="/mypage/reservelist">
+            <a href="/reservelist">
               <v-list-item>
                 <v-badge
                   color="green"
@@ -111,7 +111,7 @@
               </v-list-item>
             </a>
 
-            <a href="/mypage/tickets">
+            <a href="/tickets">
               <v-list-item>
                 <v-icon class="icon">mdi-ticket</v-icon>
                 <div class="menu-title">

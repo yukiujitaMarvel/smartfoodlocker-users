@@ -1,10 +1,11 @@
 <template>
   <div style="z-index: 50;">
+    <Header />
     <div class="menu-wrap">
 
       <a v-for="date in dates"
         :key="date.ymd" 
-        :href="Object.keys(date.items).length ? 'fooddetail?id=' + date.items.id :null" 
+        :href="Object.keys(date.items).length ? 'DMFoodDetail?id=' + date.items.id :null" 
         :tabindex="Object.keys(date.items).length ? null:-1"
       >
         <div class="menu-list-wrap" :class="{'today':isEqualDates(date,today)}">
@@ -122,10 +123,13 @@
       </div>-->
 
     </div>
+    <Footer />
   </div>
 </template>
 
 <script>
+import Header from '~/components/Header'
+import Footer from '~/components/Footer'
 import { API, graphqlOperation, Auth} from 'aws-amplify'
 import { listItems, listOrders } from '../graphql/queries'
 import { createCarts } from '../graphql/mutations'
@@ -136,6 +140,10 @@ export default {
     return {
       title: '献立表 | smartfoodlocker'
     }
+  },
+  components: {
+    Header,
+    Footer,
   },
   data () {
     return {

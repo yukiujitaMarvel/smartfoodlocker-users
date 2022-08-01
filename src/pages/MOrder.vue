@@ -264,7 +264,7 @@ export default {
       
       setTimeout(async () => {
         await this.createOrders();
-        let url = '/ordercomplete';
+        let url = '/DMOrderCompleted';
         window.location.href = url;
       }, 1000)
     },

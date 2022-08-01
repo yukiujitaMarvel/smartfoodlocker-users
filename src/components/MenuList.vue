@@ -23,7 +23,7 @@
                   color="grey lighten-4"
                   max-width="600"
                 >
-                  <a :href="'fooddetail?id=' + bento.id">
+                  <a :href="'MFoodDetail?id=' + bento.id">
                     <v-img
                       :aspect-ratio="16/12"
                       :src="bento.item_img"

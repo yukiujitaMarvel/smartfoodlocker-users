@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <MenuList />
+    <ProductsList />
     <Footer />
   </div>
 </template>
@@ -13,6 +13,7 @@ import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import MenuList from '~/components/MenuList.vue'
 import { Hub } from 'aws-amplify'
+import ProductsList from '../components/ProductsList.vue'
 
 export default {
   // middleware: 'auth',
@@ -25,7 +26,8 @@ export default {
   components: {
     Header,
     MenuList,
-    Footer
+    Footer,
+    ProductsList
 },
    created() {
     Hub.listen('auth', this.listener)

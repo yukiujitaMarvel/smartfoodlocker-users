@@ -1,21 +1,15 @@
 <template>
   <div style="z-index: 50;">
-    <Header />
-    <DailyMenuList />
-    <Footer />
+    <MenuList />
   </div>
 </template>
 
 <script>
-import Header from '~/components/Header'
-import DailyMenuList from '~/components/DailyMenuList'
-import Footer from '~/components/Footer'
+import MenuList from '~/components/MenuList'
 
 export default {
   components: {
-    Header,
-    DailyMenuList,
-    Footer,
+    MenuList,
   },
   // middleware: 'auth'
 }
