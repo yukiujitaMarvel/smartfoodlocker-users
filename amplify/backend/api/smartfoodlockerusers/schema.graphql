@@ -5,7 +5,7 @@ input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONL
 type Menus @model {
     id: ID! @primaryKey
     item_img: String
-    category_id: ID!
+    category_id: ID
     item_name: String
     item_price: Int
     release: Boolean
@@ -37,7 +37,7 @@ type Users @model {
 type Carts @model {
     id: ID! @primaryKey
     item_id: ID!
-    items: Items @hasOne(fields: ["item_id"])
+    items: Menus @hasOne(fields: ["item_id"])
     user_id: ID!
     rice_option: String
     soup_option: String
@@ -61,7 +61,7 @@ type OrderDetail @model {
     id: ID! @primaryKey(sortKeyFields: ["cart_id"])
     cart_id: ID!
     item_id: ID!
-    items: Items @hasOne(fields: ["item_id"])
+    items: Menus @hasOne(fields: ["item_id"])
     rice_option: String
     soup_option: String
     item_num: Int
@@ -74,10 +74,9 @@ type MenuOrders @model {
     users: Users @hasOne(fields: ["user_id"])
     total_price: Int
     pickup_place: String
-    pickup_time: AWSDateTime
+    pickup_time: String
     status: String
     lock_flg: Boolean
-
 }
 
 type PayInfo @model {
