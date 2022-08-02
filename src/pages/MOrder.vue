@@ -6,7 +6,7 @@
         <div class="order-info">
           <h1>注文情報</h1>
           <ol class="order-list">
-            <!-- <li v-for="cart in carts" v-bind:key="cart.id">
+            <li v-for="cart in carts" v-bind:key="cart.id">
               {{cart.items.item_name}}
               <div v-if="cart.items.category_id === '01'">
                 <span v-if="cart.rice_option === '01'" class="amount">少なめ</span>
@@ -15,16 +15,16 @@
                 <span v-if="cart.soup_option === '02'">味噌汁</span>
                 <span>数量:{{cart.item_num}}</span>
               </div>
-            </li>              -->
-            <li>{{items.item_name}}</li>
+            </li>
+            <!--<li>{{items.item_name}}</li>-->
             <!--<li>デリサラダ</li>-->
           </ol>
-          <!-- <div class="total-price">
-            <p>¥{{totalPrice.toLocaleString()}}</p>
-          </div> -->
           <div class="total-price">
-            <p>¥{{items.item_price}}</p>
+            <p>¥{{totalPrice.toLocaleString()}}</p>
           </div>
+          <!--<div class="total-price">
+            <p>¥{{items.item_price}}</p>
+          </div>-->
         </div>
         <div class="pay-info">
           <h1>支払い情報</h1>
@@ -70,7 +70,7 @@
               <v-select
                 v-model="pickup_time"
                 :items="time"
-                :label="month + '/' + day + '(' +  weekDay  + ')'"
+                label="8/2(火)"
               ></v-select>
             </v-col>
           </v-row>
@@ -219,8 +219,8 @@ import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation } from 'aws-amplify'
-import { getItems } from '../graphql/queries'
-import { createOrders, createOrderDetail, deleteCarts } from '../graphql/mutations'
+import { listCarts} from '../graphql/queries'
+import { createMenuOrders, createOrderDetail, deleteCarts } from '../graphql/mutations'
 import Auth from "@aws-amplify/auth";
 import '~/assets/css/style.css'
 
@@ -234,8 +234,10 @@ export default {
     return {
       dialog: false,
       myTitle: '注文内容',
+      totalPrice: 0,
       items: {},
-
+      user_id: '',
+      carts: [],
       year:'',
       month:'',
       day:'',
@@ -252,9 +254,10 @@ export default {
     Footer,
   },
   async created() {
-  //   const userData = await Auth.currentAuthenticatedUser();
-  //   this.user_id = userData.attributes.sub;
-  await this.getItems();
+    const userData = await Auth.currentAuthenticatedUser();
+    this.user_id = userData.attributes.sub;
+    await this.listCarts();
+    this.totalPrice = this.getTotalPrice(this.carts);
   },
   methods: {
     async Orders(){
@@ -264,112 +267,72 @@ export default {
       this.dialog = false
       
       setTimeout(async () => {
-        await this.createOrders();
+        await this.addOrders();
         let url = '/DMOrderCompleted';
         window.location.href = url;
       }, 1000)
     },
-    async getItems() {
-      const query = this.$route.query.id;
-      const items = await API.graphql(graphqlOperation(getItems,{id: query}));
-      this.items = items.data.getItems;
-
-      const ymd = this.items.release_day.split('-');
-      this.year = ymd[0];
-      this.month = ymd[1];
-      this.day = ymd[2];
-
-      const ts = Date.parse(this.items.release_day + 'T00:00:00.000+09:00');
-      console.log(ts);
-      const dt = new Date(ts);
-
-      this.weekDay = ['日','月','火','水','木','金','土'][dt.getDay()];
-
+    reserve(){
+      this.dialog = true
     },
-    async createOrders() {
-      const userData = await Auth.currentAuthenticatedUser();
-      const user_id = userData.attributes.sub;
+    async listCarts() {
+      const carts = await API.graphql(
+        graphqlOperation(
+          listCarts, {
+            filter: {
+              user_id: {
+                eq: this.user_id
+              }
+            }
+          }
+        )
+      );
+      this.carts = carts.data.listCarts.items;
+      console.log(this.carts[0]?.item_id);
+    },
+    async addOrders() {
       const createOrdersInput = {
-        user_id: user_id,
-        item_id: this.items.id,
-        total_price: this.items.item_price,
+        user_id: this.user_id,
+        total_price: this.totalPrice,
         pickup_place: this.pickup_place,
         pickup_time: this.pickup_time,
-        status: '01',
+        status: "01",
         lock_flg: false,
       };
+      const result = await API.graphql(graphqlOperation(createMenuOrders,{input: createOrdersInput}));
 
-      console.log(createOrdersInput);
-
-      await API.graphql(graphqlOperation(createOrders,{input: createOrdersInput}));
-
+      const promises = this.carts.map(async (cart) => {
+        const createOrederDetailInput = {
+          id: result.data.createMenuOrders.id,
+          cart_id: cart.id,
+          item_id: cart.item_id,
+          rice_option: cart.rice_option,
+          soup_option: cart.soup_option,
+          item_num: cart.item_num,
+        };        
+        const deleteCartsInput = {
+          id: cart.id
+        };
+        await API.graphql(graphqlOperation(createOrderDetail,{input: createOrederDetailInput}));
+        await API.graphql(graphqlOperation(deleteCarts,{input: deleteCartsInput}));
+      });
+      await Promise.all(promises);
     },
-    // reserve(){
-    //   this.dialog = true
-    // },
-    // async listCarts() {
-    //   const carts = await API.graphql(
-    //     graphqlOperation(
-    //       listCarts, {
-    //         filter: {
-    //           user_id: {
-    //             eq: this.user_id
-    //           }
-    //         }
-    //       }
-    //     )
-    //   );
-    //   this.carts = carts.data.listCarts.items;
-    //   console.log(this.carts[0]?.item_id);
-    // },
-    // async addOrders() {
-    //   const dt = new Date();
-    //   const isoStr = dt.toISOString();
-
-    //   const createOrdersInput = {
-    //     user_id: this.user_id,
-    //     total_price: this.totalPrice,
-    //     pickup_place: this.pickup_place,
-    //     pickup_time: isoStr,
-    //     status: "01",
-    //     lock_flg: false,
-    //   };
-    //   const result = await API.graphql(graphqlOperation(createOrders,{input: createOrdersInput}));
-
-    //   const promises = this.carts.map(async (cart) => {
-    //     const createOrederDetailInput = {
-    //       id: result.data.createOrders.id,
-    //       cart_id: cart.id,
-    //       item_id: cart.item_id,
-    //       rice_option: cart.rice_option,
-    //       soup_option: cart.soup_option,
-    //       item_num: cart.item_num,
-    //     };        
-    //     const deleteCartsInput = {
-    //       id: cart.id
-    //     };
-    //     await API.graphql(graphqlOperation(createOrderDetail,{input: createOrederDetailInput}));
-    //     await API.graphql(graphqlOperation(deleteCarts,{input: deleteCartsInput}));
-    //   });
-    //   await Promise.all(promises);
-
-    //   window.location.href = "passcode";
-    // },
-    // getTotalPrice(carts) {
-    //   let totalPrice = 0;
-    //   carts.forEach((cart) => {
-    //     let price = cart.items.item_price;
-    //     if(cart.rice_option === '03') {
-    //       price = price + 30;
-    //     }
-    //     if(cart.soup_option === '02') {
-    //       price = price + 50;
-    //     }
-    //     price = price * cart.item_num;
-    //     totalPrice = totalPrice + price;
-    //   });
-    //   return totalPrice;
-    // }
+    getTotalPrice(carts) {
+      let totalPrice = 0;
+      carts.forEach((cart) => {
+        let price = cart.items.item_price;
+        if(cart.rice_option === '03') {
+          price = price + 30;
+        }
+        if(cart.soup_option === '02') {
+          price = price + 50;
+        }
+        price = price * cart.item_num;
+        totalPrice = totalPrice + price;
+      });
+      return totalPrice;
+    }
   }  
 }
 </script>

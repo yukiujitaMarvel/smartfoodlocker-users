@@ -121,7 +121,7 @@
           </div>
         </div>-->
         <div class="button-wrap">
-          <a href="order" class="btn btn--orange btn-c">お支払い<font-awesome-icon icon="fa-solid fa-angle-right" style="margin-left:20px;" /></a>
+          <a href="MOrder" class="btn btn--orange btn-c">お支払い<font-awesome-icon icon="fa-solid fa-angle-right" style="margin-left:20px;" /></a>
         </div>
       </div>
     <Footer />
