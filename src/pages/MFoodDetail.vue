@@ -44,13 +44,13 @@
               <h3>味噌汁</h3>
             </div>
             <fieldset>
-              <input id="item-4" class="radio-inline__input" type="radio" name="soup-option" value="01" checked="checked"/>
+              <input id="item-4" class="radio-inline__input" type="radio" name="soup-option" value="01" v-model="soupOption" checked="checked"/>
               <label class="radio-inline__label" for="item-4">
-                  少なめ
+                  不要
               </label>
-              <input id="item-5" class="radio-inline__input" type="radio" name="soup-option" value="02"/>
+              <input id="item-5" class="radio-inline__input" type="radio" name="soup-option" value="02" v-model="soupOption"/>
               <label class="radio-inline__label" for="item-5">
-                  普通
+                  要
               </label>
             </fieldset>
           </div>

@@ -146,7 +146,7 @@ export default {
   },
   data () {
     return {
-      myTitle: '注文内容',
+      myTitle: 'カート一覧',
       carts: [],
       user_id: '',
     }
