@@ -33,7 +33,7 @@
               <label class="radio-inline__label" for="item-2">
                   普通
               </label>
-              <input id="item-3" class="radio-inline__input" type="radio" name="race_option" value="03" />
+              <input id="item-3" class="radio-inline__input" type="radio" name="race_option" value="03" v-model="riceOption"/>
               <label class="radio-inline__label" for="item-3">
                   多め +¥30
               </label>
