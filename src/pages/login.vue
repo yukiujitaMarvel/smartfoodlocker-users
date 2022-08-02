@@ -6,6 +6,7 @@
 
 <script>
 import { Hub } from 'aws-amplify'
+import '~/assets/css/style.css'
 
 
 

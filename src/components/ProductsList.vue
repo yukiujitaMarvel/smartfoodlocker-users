@@ -6,6 +6,7 @@
 
 <script>
 import MenuList from '~/components/MenuList'
+import '~/assets/css/style.css'
 
 export default {
   components: {

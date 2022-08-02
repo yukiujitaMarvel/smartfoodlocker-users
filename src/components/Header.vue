@@ -103,7 +103,7 @@
                   color="green"
                   dot
                 >
-                  <v-icon class="icon">mdi-history</v-icon>
+                  <v-icon class="icon">mdi-bookmark-outline</v-icon>
                 </v-badge>
                 <div class="menu-title">
                   <h3>予約注文</h3>
@@ -116,6 +116,15 @@
                 <v-icon class="icon">mdi-ticket</v-icon>
                 <div class="menu-title">
                   <h3>チケット</h3>
+                </div>
+              </v-list-item>
+            </a>
+
+            <a href="/orderhistory">
+              <v-list-item>
+                <v-icon class="icon">mdi-history</v-icon>
+                <div class="menu-title">
+                  <h3>注文履歴</h3>
                 </div>
               </v-list-item>
             </a>
@@ -145,6 +154,7 @@
 <script>
 import { API, graphqlOperation} from 'aws-amplify'
 import { listUsers } from '../graphql/queries'
+import '~/assets/css/style.css'
 import Auth from "@aws-amplify/auth";
 // ここから追加
 export default {

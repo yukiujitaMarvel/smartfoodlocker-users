@@ -88,6 +88,7 @@
 import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
+import '~/assets/css/style.css'
 
 export default {
   head() {

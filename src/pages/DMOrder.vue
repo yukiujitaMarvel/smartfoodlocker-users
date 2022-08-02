@@ -222,6 +222,7 @@ import { API, graphqlOperation } from 'aws-amplify'
 import { getItems } from '../graphql/queries'
 import { createOrders, createOrderDetail, deleteCarts } from '../graphql/mutations'
 import Auth from "@aws-amplify/auth";
+import '~/assets/css/style.css'
 
 export default {
   head() {

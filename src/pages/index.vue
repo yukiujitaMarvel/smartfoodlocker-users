@@ -14,6 +14,7 @@ import Footer from '~/components/Footer'
 import MenuList from '~/components/MenuList.vue'
 import { Hub } from 'aws-amplify'
 import ProductsList from '../components/ProductsList.vue'
+import '~/assets/css/style.css'
 
 export default {
   // middleware: 'auth',

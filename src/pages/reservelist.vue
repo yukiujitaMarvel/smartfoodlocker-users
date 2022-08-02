@@ -76,6 +76,7 @@ import Footer from '~/components/Footer'
 import { API, graphqlOperation, Auth} from 'aws-amplify'
 import { listOrders } from '~/graphql/queries'
 import { updateOrders } from '~/graphql/mutations'
+import '~/assets/css/style.css'
 
 export default {
   head() {
