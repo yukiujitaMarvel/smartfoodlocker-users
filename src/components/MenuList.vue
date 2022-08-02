@@ -177,7 +177,7 @@
 
 <script>
 import { API, graphqlOperation} from 'aws-amplify'
-import { listItems } from '../graphql/queries'
+import { listMenus } from '../graphql/queries'
 
 export default {
   data() {
@@ -198,8 +198,8 @@ export default {
   },
   methods: {
     async getItems1() {
-      const items = await API.graphql(graphqlOperation(listItems));
-      this.items = items.data.listItems.items;
+      const items = await API.graphql(graphqlOperation(listMenus));
+      this.items = items.data.listMenus.items;
       
       this.items.forEach((value) => {
         if(value.category_id == '01') {
@@ -209,8 +209,8 @@ export default {
       })
     },
     async getItems2() {
-      const items = await API.graphql(graphqlOperation(listItems));
-      this.items = items.data.listItems.items;
+      const items = await API.graphql(graphqlOperation(listMenus));
+      this.items = items.data.listMenus.items;
       
       this.items.forEach((value) => {
         if(value.category_id == '02') {
@@ -220,8 +220,8 @@ export default {
       })
     },
     async getItems3() {
-      const items = await API.graphql(graphqlOperation(listItems));
-      this.items = items.data.listItems.items;
+      const items = await API.graphql(graphqlOperation(listMenus));
+      this.items = items.data.listMenus.items;
       
       this.items.forEach((value) => {
         if(value.category_id == '03') {
@@ -231,8 +231,8 @@ export default {
       })
     },
     async getItems4() {
-      const items = await API.graphql(graphqlOperation(listItems));
-      this.items = items.data.listItems.items;
+      const items = await API.graphql(graphqlOperation(listMenus));
+      this.items = items.data.listMenus.items;
       
       this.items.forEach((value) => {
         if(value.category_id == '04') {
