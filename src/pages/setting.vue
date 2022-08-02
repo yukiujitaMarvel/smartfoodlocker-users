@@ -72,6 +72,7 @@ import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import Auth from "@aws-amplify/auth";
+import '~/assets/css/style.css'
 
 
 

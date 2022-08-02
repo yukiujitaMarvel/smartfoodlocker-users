@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import '~/assets/css/style.css'
+
 export default {
   name: 'NuxtTutorial'
 }

@@ -136,6 +136,7 @@ import { API, graphqlOperation } from 'aws-amplify'
 import { listCarts } from '../graphql/queries'
 import { deleteCarts } from '../graphql/mutations'
 import Auth from "@aws-amplify/auth";
+import '~/assets/css/style.css'
 
 export default {
   head() {

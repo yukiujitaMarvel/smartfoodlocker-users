@@ -31,6 +31,7 @@
 import Header from '~/components/Header'
 import HeaderPasscord from '~/components/HeaderPasscord'
 import Footer from '~/components/Footer'
+import '~/assets/css/style.css'
 
 export default {
   head() {

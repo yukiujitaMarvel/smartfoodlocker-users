@@ -126,6 +126,7 @@ import { API, graphqlOperation, Auth} from 'aws-amplify'
 import { getItems, listOrders} from '../graphql/queries'
 import { updateOrders } from '../graphql/mutations'
 import { tsImportEqualsDeclaration } from '@babel/types'
+import '~/assets/css/style.css'
 
 export default {
   head() {
