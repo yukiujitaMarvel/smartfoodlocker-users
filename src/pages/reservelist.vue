@@ -74,8 +74,8 @@ import Header from '~/components/Header'
 import HeaderPasscord from '~/components/HeaderPasscord'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation, Auth} from 'aws-amplify'
-import { listOrders } from '~/graphql/queries'
-import { updateOrders } from '~/graphql/mutations'
+import { listOldOrders } from '~/graphql/queries'
+import { updateOldOrders } from '~/graphql/mutations'
 import '~/assets/css/style.css'
 
 export default {
@@ -113,7 +113,7 @@ export default {
     },
     async listOrders() {
       const orders = await API.graphql(
-        graphqlOperation(listOrders, {
+        graphqlOperation(listOldOrders, {
           filter: {
             and:[
               {user_id: {eq: this.user_id}}, 
@@ -127,7 +127,7 @@ export default {
           }
         })
       );
-      this.orders = orders.data.listOrders.items;
+      this.orders = orders.data.listOldOrders.items;
 
       this.orders.sort(function(a, b) {
         if (a.items.release_day > b.items.release_day) {
@@ -150,7 +150,7 @@ export default {
         lock_flg: this.selectedOrders.lock_flg,
       };
 
-      await API.graphql(graphqlOperation(updateOrders,{input: updateOrdersInput}));
+      await API.graphql(graphqlOperation(updateOldOrders,{input: updateOrdersInput}));
     },
     async cancelOrders() {
       this.dialog = false;
