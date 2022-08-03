@@ -219,8 +219,8 @@ import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation } from 'aws-amplify'
-import { listCarts} from '../graphql/queries'
-import { createMenuOrders, createOrderDetail, deleteCarts } from '../graphql/mutations'
+import { listOldCarts} from '../graphql/queries'
+import { createMenuOrders, createOrderDetail, deleteOldCarts } from '../graphql/mutations'
 import Auth from "@aws-amplify/auth";
 import '~/assets/css/style.css'
 
@@ -278,7 +278,7 @@ export default {
     async listCarts() {
       const carts = await API.graphql(
         graphqlOperation(
-          listCarts, {
+          listOldCarts, {
             filter: {
               user_id: {
                 eq: this.user_id
@@ -287,7 +287,7 @@ export default {
           }
         )
       );
-      this.carts = carts.data.listCarts.items;
+      this.carts = carts.data.listOldCarts.items;
       console.log(this.carts[0]?.item_id);
     },
     async addOrders() {
@@ -314,7 +314,7 @@ export default {
           id: cart.id
         };
         await API.graphql(graphqlOperation(createOrderDetail,{input: createOrederDetailInput}));
-        await API.graphql(graphqlOperation(deleteCarts,{input: deleteCartsInput}));
+        await API.graphql(graphqlOperation(deleteOldCarts,{input: deleteCartsInput}));
       });
       await Promise.all(promises);
     },

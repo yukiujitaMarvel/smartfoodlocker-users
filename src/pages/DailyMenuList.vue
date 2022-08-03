@@ -131,7 +131,7 @@
 import Header from '~/components/Header'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation, Auth} from 'aws-amplify'
-import { listItems, listOrders } from '../graphql/queries'
+import { listOldItems, listOldOrders } from '../graphql/queries'
 import { createCarts } from '../graphql/mutations'
 import { tsImportEqualsDeclaration } from '@babel/types'
 import '~/assets/css/style.css'
@@ -221,12 +221,12 @@ export default {
       let items = '';
 
       items = await API.graphql(
-        graphqlOperation(listItems, {
+        graphqlOperation(listOldItems, {
           filter: {release_day: {ge: this.dates[0].ymd, le: this.dates[this.maxDays-1].ymd}}
         })
       );
 
-      this.items = items.data.listItems.items;
+      this.items = items.data.listOldItems.items;
 
       console.log(this.items);
     },
@@ -241,7 +241,7 @@ export default {
 
       if(itemIDArray.length) {
         const orders = await API.graphql(
-          graphqlOperation(listOrders, {
+          graphqlOperation(listOldOrders, {
             filter: {
               and:[
                 {user_id: {eq: user_id}}, 
@@ -256,7 +256,7 @@ export default {
             }
           })
         );
-        this.orders = orders.data.listOrders.items;
+        this.orders = orders.data.listOldOrders.items;
       }
 
       console.log(this.orders);

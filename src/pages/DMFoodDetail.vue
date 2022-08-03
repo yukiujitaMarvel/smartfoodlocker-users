@@ -123,7 +123,7 @@ import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation, Auth} from 'aws-amplify'
-import { getItems, listOrders} from '../graphql/queries'
+import { getOldItems, listOldOrders} from '../graphql/queries'
 import { updateOrders } from '../graphql/mutations'
 import { tsImportEqualsDeclaration } from '@babel/types'
 import '~/assets/css/style.css'
@@ -162,8 +162,8 @@ export default {
 
     },
     async getItems() {
-      const items = await API.graphql(graphqlOperation(getItems,{id: this.$route.query.id}));
-      this.items = items.data.getItems;
+      const items = await API.graphql(graphqlOperation(getOldItems,{id: this.$route.query.id}));
+      this.items = items.data.getOldItems;
       this.myTitle = this.items.item_name;
 
       const ymd = this.items.release_day.split('-');
@@ -176,7 +176,7 @@ export default {
       const user_id = userData.attributes.sub;
 
       const orders = await API.graphql(
-        graphqlOperation(listOrders, {
+        graphqlOperation(listOldOrders, {
           filter: {
             and:[
               {item_id: {eq: this.$route.query.id}},
@@ -191,8 +191,8 @@ export default {
           }
         })
       );
-      if(orders.data.listOrders.items.length) {
-        this.orders = orders.data.listOrders.items[0];
+      if(orders.data.listOldOrders.items.length) {
+        this.orders = orders.data.listOldOrders.items[0];
       }
     },
     async cancelOrders() {

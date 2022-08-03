@@ -133,8 +133,8 @@ import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation } from 'aws-amplify'
-import { listCarts } from '../graphql/queries'
-import { deleteCarts } from '../graphql/mutations'
+import { listOldCarts } from '../graphql/queries'
+import { deleteOldCarts } from '../graphql/mutations'
 import Auth from "@aws-amplify/auth";
 import '~/assets/css/style.css'
 
@@ -165,7 +165,7 @@ export default {
     async listCarts() {
       const carts = await API.graphql(
         graphqlOperation(
-          listCarts, {
+          listOldCarts, {
             filter: {
               user_id: {
                 eq: this.user_id
@@ -174,14 +174,14 @@ export default {
           }
         )
       );
-      this.carts = carts.data.listCarts.items;
+      this.carts = carts.data.listOldCarts.items;
       console.log(this.carts[0]?.item_id);
     },
     async deleteCarts(cart) {
       const deleteCartsInput = {
         id: cart.id
       };
-      await API.graphql(graphqlOperation(deleteCarts,{input: deleteCartsInput}));
+      await API.graphql(graphqlOperation(deleteOldCarts,{input: deleteCartsInput}));
       this.listCarts();
       await this.$refs.headerDetail.countCarts();  
     },

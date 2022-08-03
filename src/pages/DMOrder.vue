@@ -219,8 +219,8 @@ import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation } from 'aws-amplify'
-import { getItems } from '../graphql/queries'
-import { createOrders, createOrderDetail, deleteCarts } from '../graphql/mutations'
+import { getOldItems } from '../graphql/queries'
+import { createOldOrders} from '../graphql/mutations'
 import Auth from "@aws-amplify/auth";
 import '~/assets/css/style.css'
 
@@ -254,7 +254,7 @@ export default {
   async created() {
   //   const userData = await Auth.currentAuthenticatedUser();
   //   this.user_id = userData.attributes.sub;
-  await this.getItems();
+    await this.getItems();
   },
   methods: {
     async Orders(){
@@ -271,8 +271,8 @@ export default {
     },
     async getItems() {
       const query = this.$route.query.id;
-      const items = await API.graphql(graphqlOperation(getItems,{id: query}));
-      this.items = items.data.getItems;
+      const items = await API.graphql(graphqlOperation(getOldItems,{id: query}));
+      this.items = items.data.getOldItems;
 
       const ymd = this.items.release_day.split('-');
       this.year = ymd[0];
@@ -301,7 +301,7 @@ export default {
 
       console.log(createOrdersInput);
 
-      await API.graphql(graphqlOperation(createOrders,{input: createOrdersInput}));
+      await API.graphql(graphqlOperation(createOldOrders,{input: createOrdersInput}));
 
     },
     // reserve(){

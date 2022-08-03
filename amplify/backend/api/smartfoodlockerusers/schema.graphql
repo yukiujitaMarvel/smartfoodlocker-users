@@ -2,7 +2,25 @@
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
 input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
+type Items @model{
+    id: ID! @primaryKey
+    category_id: ID
+    merchant_id: ID
+    item_img: String
+    item_name: String
+    item_price: String
+    item_stock: Int
+    item_detail: String
+}
+
 type Menus @model {
+    id: ID! @primaryKey(sortKeyFields: ["release_day"])
+    release_day: String!
+    merchant_id: ID
+    items: Items @hasOne(fields: ["id"])
+}
+
+type OldMenus @model {
     id: ID! @primaryKey
     item_img: String
     category_id: ID
@@ -17,7 +35,7 @@ type Menus @model {
     logical_deletion_flg: Boolean
 }
 
-type Items @model{
+type OldItems @model{
     id: ID! @primaryKey
     item_img: String
     item_name: String
@@ -37,7 +55,17 @@ type Users @model {
 type Carts @model {
     id: ID! @primaryKey
     item_id: ID!
-    items: Menus @hasOne(fields: ["item_id"])
+    items: Items @hasOne(fields: ["item_id"])
+    user_id: ID!
+    rice_option: String
+    soup_option: String
+    item_num: Int
+}
+
+type OldCarts @model {
+    id: ID! @primaryKey
+    item_id: ID!
+    items: OldMenus @hasOne(fields: ["item_id"])
     user_id: ID!
     rice_option: String
     soup_option: String
@@ -46,10 +74,27 @@ type Carts @model {
 
 type Orders @model {
     id: ID! @primaryKey
+    merchant_id: ID
+    user_id: ID
+    item_id: ID
+    items: Items @hasOne(fields: ["item_id"])
+    order_category: String
+    rice_option: String
+    soup_option: String
+    item_num: Int
+    total_price: Int
+    pickup_place: String
+    pickup_time: String
+    status: String
+    lock_flg: Boolean
+}
+
+type OldOrders @model {
+    id: ID! @primaryKey
     user_id: ID!
     users: Users @hasOne(fields: ["user_id"])
     item_id: ID!
-    items: Items @hasOne(fields: ["item_id"])
+    items: OldItems @hasOne(fields: ["item_id"])
     total_price: Int
     pickup_place: String
     pickup_time: String
@@ -61,7 +106,7 @@ type OrderDetail @model {
     id: ID! @primaryKey(sortKeyFields: ["cart_id"])
     cart_id: ID!
     item_id: ID!
-    items: Menus @hasOne(fields: ["item_id"])
+    items: OldMenus @hasOne(fields: ["item_id"])
     rice_option: String
     soup_option: String
     item_num: Int

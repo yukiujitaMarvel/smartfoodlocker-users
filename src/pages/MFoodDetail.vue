@@ -70,8 +70,8 @@ import Header from '~/components/Header'
 import HeaderDetail from '~/components/HeaderDetail'
 import Footer from '~/components/Footer'
 import { API, graphqlOperation, Auth} from 'aws-amplify'
-import { getMenus, /*listItemLists*/ } from '../graphql/queries'
-import { createCarts } from '../graphql/mutations'
+import { getOldMenus } from '../graphql/queries'
+import { createOldCarts } from '../graphql/mutations'
 import { tsImportEqualsDeclaration } from '@babel/types'
 export default {
   head() {
@@ -102,11 +102,11 @@ export default {
   methods: {
     async getItemLists() {
       const query = this.$route.query.id;
-      const items = await API.graphql(graphqlOperation(getMenus,{id: query}));
+      const items = await API.graphql(graphqlOperation(getOldMenus,{id: query}));
       console.log(items);
-      this.items = items.data.getMenus;
+      this.items = items.data.getOldMenus;
       console.log(this.items);
-      this.myTitle = items.data.getMenus.item_name;
+      this.myTitle = items.data.getOldMenus.item_name;
       /*const itemLists = await API.graphql(graphqlOperation(listItemLists));
       this.itemLists = itemLists.data.listItemLists.items;
       this.itemLists.forEach((value) => {
@@ -126,7 +126,7 @@ export default {
         soup_option: this.soupOption,
         item_num: this.benched,
       };
-      await API.graphql(graphqlOperation(createCarts,{input: createCartsInput}));
+      await API.graphql(graphqlOperation(createOldCarts,{input: createCartsInput}));
       await this.$refs.headerDetail.countCarts();
     },
   },
