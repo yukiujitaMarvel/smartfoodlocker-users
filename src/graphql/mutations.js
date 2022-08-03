@@ -391,6 +391,105 @@ export const deleteCarts = /* GraphQL */ `
     }
   }
 `;
+export const createOldCarts = /* GraphQL */ `
+  mutation CreateOldCarts(
+    $input: CreateOldCartsInput!
+    $condition: ModelOldCartsConditionInput
+  ) {
+    createOldCarts(input: $input, condition: $condition) {
+      id
+      item_id
+      items {
+        id
+        item_img
+        category_id
+        item_name
+        item_price
+        release
+        deleteAt
+        item_stock
+        create_user
+        update_user
+        delete_user
+        logical_deletion_flg
+        createdAt
+        updatedAt
+      }
+      user_id
+      rice_option
+      soup_option
+      item_num
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateOldCarts = /* GraphQL */ `
+  mutation UpdateOldCarts(
+    $input: UpdateOldCartsInput!
+    $condition: ModelOldCartsConditionInput
+  ) {
+    updateOldCarts(input: $input, condition: $condition) {
+      id
+      item_id
+      items {
+        id
+        item_img
+        category_id
+        item_name
+        item_price
+        release
+        deleteAt
+        item_stock
+        create_user
+        update_user
+        delete_user
+        logical_deletion_flg
+        createdAt
+        updatedAt
+      }
+      user_id
+      rice_option
+      soup_option
+      item_num
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteOldCarts = /* GraphQL */ `
+  mutation DeleteOldCarts(
+    $input: DeleteOldCartsInput!
+    $condition: ModelOldCartsConditionInput
+  ) {
+    deleteOldCarts(input: $input, condition: $condition) {
+      id
+      item_id
+      items {
+        id
+        item_img
+        category_id
+        item_name
+        item_price
+        release
+        deleteAt
+        item_stock
+        create_user
+        update_user
+        delete_user
+        logical_deletion_flg
+        createdAt
+        updatedAt
+      }
+      user_id
+      rice_option
+      soup_option
+      item_num
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createOrders = /* GraphQL */ `
   mutation CreateOrders(
     $input: CreateOrdersInput!

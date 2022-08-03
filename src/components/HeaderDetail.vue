@@ -38,7 +38,7 @@
 
 <script>
 import { API, graphqlOperation} from 'aws-amplify'
-import { listCarts } from '../graphql/queries'
+import { listOldCarts } from '../graphql/queries'
 import Auth from "@aws-amplify/auth";
 
 export default {
@@ -58,7 +58,7 @@ export default {
     async countCarts() {
       const carts = await API.graphql(
         graphqlOperation(
-          listCarts, {
+          listOldCarts, {
             filter: {
               user_id: {
                 eq: this.userId
@@ -67,7 +67,7 @@ export default {
           }
         )
       );
-      this.count = carts.data.listCarts.items.length;
+      this.count = carts.data.listOldCarts.items.length;
       console.log(this.count);
     }
   }

@@ -317,6 +317,81 @@ export const listCarts = /* GraphQL */ `
     }
   }
 `;
+export const getOldCarts = /* GraphQL */ `
+  query GetOldCarts($id: ID!) {
+    getOldCarts(id: $id) {
+      id
+      item_id
+      items {
+        id
+        item_img
+        category_id
+        item_name
+        item_price
+        release
+        deleteAt
+        item_stock
+        create_user
+        update_user
+        delete_user
+        logical_deletion_flg
+        createdAt
+        updatedAt
+      }
+      user_id
+      rice_option
+      soup_option
+      item_num
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listOldCarts = /* GraphQL */ `
+  query ListOldCarts(
+    $id: ID
+    $filter: ModelOldCartsFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listOldCarts(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        item_id
+        items {
+          id
+          item_img
+          category_id
+          item_name
+          item_price
+          release
+          deleteAt
+          item_stock
+          create_user
+          update_user
+          delete_user
+          logical_deletion_flg
+          createdAt
+          updatedAt
+        }
+        user_id
+        rice_option
+        soup_option
+        item_num
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getOrders = /* GraphQL */ `
   query GetOrders($id: ID!) {
     getOrders(id: $id) {

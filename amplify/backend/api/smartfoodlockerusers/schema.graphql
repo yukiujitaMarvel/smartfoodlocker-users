@@ -62,6 +62,16 @@ type Carts @model {
     item_num: Int
 }
 
+type OldCarts @model {
+    id: ID! @primaryKey
+    item_id: ID!
+    items: OldMenus @hasOne(fields: ["item_id"])
+    user_id: ID!
+    rice_option: String
+    soup_option: String
+    item_num: Int
+}
+
 type Orders @model {
     id: ID! @primaryKey
     merchant_id: ID
