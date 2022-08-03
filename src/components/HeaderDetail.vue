@@ -27,9 +27,9 @@
               <a href="cart"><font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="color: black;" /></a>
             </v-badge>
           </v-tab>
-          <span>
+          <!-- <span>
           <font-awesome-icon icon="fa-solid fa-cart-arrow-down" style="color: black;" />
-        </span>
+          </span> -->
         </v-btn>
       </v-toolbar>
     </div>

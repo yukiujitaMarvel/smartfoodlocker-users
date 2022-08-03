@@ -234,7 +234,7 @@ h3{
 }
 .v-list-item{
   border-bottom: 1px solid white;
-  padding: 10px;
+  padding: 10px !important;
 }
 
 .v-application a {
